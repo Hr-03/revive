@@ -1238,7 +1238,10 @@ fetch(profInfoUrl)
                     <ListItemButton
                       key={i}
                       onClick={() => {
-                         if (parent?.MenuName === "Menu") {
+                         if(parent?.MenuName === "Dashboard"){
+                         Role=="1"?navigate("/dashboard"):navigate("/dashboard2")
+                        }
+                         else if (parent?.MenuName === "Menu") {
                           handleMenuClick();
                         } else if (parent?.MenuName === "Leads/Patients") {
                           handleLpClick();
@@ -1568,7 +1571,7 @@ fetch(profInfoUrl)
                                 return (
                                   <>
                                      <ListItemButton sx={{ pl: 3 }} onClick={()=>{
-                                      if(rpt?.MenuName==="Enquiry To Patient Conversions"){
+                                     if(rpt?.MenuName==="Enquiry To Patient Conversions"){
                                         navigate("/e2p")
                                       }
                                       else if(rpt?.MenuName==="Patients Treatment"){
@@ -1588,6 +1591,18 @@ fetch(profInfoUrl)
                                       }
                                       else if(rpt?.MenuName==="Consultation Report"){
                                         navigate("/consult-rpt")
+                                      }
+                                      else if(rpt?.MenuName==="Invoice Report"){
+                                        navigate("/inv-rpt")
+                                      }
+                                      else if(rpt?.MenuName==="Collection Report"){
+                                        navigate("/clln-rpt")
+                                      }
+                                      else if(rpt?.MenuName==="Activity Report"){
+                                        navigate("/activity-rpt")
+                                      }
+                                      else if(rpt?.MenuName==="Appointment Cancellation Report"){
+                                        navigate("/cancelled-apmnt")
                                       }
                                     }}>
                                       <ListItemIcon>

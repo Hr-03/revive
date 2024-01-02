@@ -58,6 +58,11 @@ import InvoiceView from './Pages/InvoiceView';
 import ConsultationInvoice from './Pages/ConsultationInvoice';
 import ConsultationInvoiceView from './Pages/ConsultationInvoiceView';
 import EditAccessPermission from './Menu/User Settings/EditAccessPermission';
+import InvoiceReport from './Pages/Reports/InvoiceReports';
+import CollectionReport from './Pages/Reports/CollectionReport';
+import ActivityReport from './Pages/Reports/ActivityReport';
+import Dashboard2 from './Pages/Dashboard2';
+import CancelledAppointments from './Pages/Reports/CancelledAppointments';
 
 
 function App() {
@@ -120,6 +125,11 @@ function App() {
           <Route path="/consult-view-inv" element={<ConsultationInvoiceView/>} />  
           <Route path="/add-consult-inv" element={<ConsultationInvoice/>} />
           <Route path="/edit-acc-perm/:AccessId" element={<EditAccessPermission/>} />
+          <Route path="/inv-rpt" element={<InvoiceReport/>} />
+          <Route path="/clln-rpt" element={<CollectionReport/>} />
+          <Route path="/activity-rpt" element={<ActivityReport/>} />
+          <Route path="/dashboard2" element={<Dashboard2/>} />
+          <Route path="/cancelled-apmnt" element={<CancelledAppointments/>} />
      
 
 

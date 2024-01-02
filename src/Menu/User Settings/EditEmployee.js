@@ -67,7 +67,7 @@ import Swal from "sweetalert2";
 import invoice from "../../Assets/invoice.png";
 import addTmnt from "../../Assets/addtmt.png";
 import addColl from "../../Assets/addcoln.png";
-
+import moment from 'moment';
 const drawerWidth = 240;
 
 const Main = styled("main", { shouldForwardProp: (prop) => prop !== "open" })(
@@ -788,7 +788,10 @@ function EditEmployee() {
                     <ListItemButton
                       key={i}
                       onClick={() => {
-                         if (parent?.MenuName === "Menu") {
+                         if(parent?.MenuName === "Dashboard"){
+                         Role=="1"?navigate("/dashboard"):navigate("/dashboard2")
+                        }
+                         else if (parent?.MenuName === "Menu") {
                           handleMenuClick();
                         } else if (parent?.MenuName === "Leads/Patients") {
                           handleLpClick();
@@ -1118,7 +1121,7 @@ function EditEmployee() {
                                 return (
                                   <>
                                      <ListItemButton sx={{ pl: 3 }} onClick={()=>{
-                                      if(rpt?.MenuName==="Enquiry To Patient Conversions"){
+                                     if(rpt?.MenuName==="Enquiry To Patient Conversions"){
                                         navigate("/e2p")
                                       }
                                       else if(rpt?.MenuName==="Patients Treatment"){
@@ -1138,6 +1141,18 @@ function EditEmployee() {
                                       }
                                       else if(rpt?.MenuName==="Consultation Report"){
                                         navigate("/consult-rpt")
+                                      }
+                                      else if(rpt?.MenuName==="Invoice Report"){
+                                        navigate("/inv-rpt")
+                                      }
+                                      else if(rpt?.MenuName==="Collection Report"){
+                                        navigate("/clln-rpt")
+                                      }
+                                      else if(rpt?.MenuName==="Activity Report"){
+                                        navigate("/activity-rpt")
+                                      }
+                                      else if(rpt?.MenuName==="Appointment Cancellation Report"){
+                                        navigate("/cancelled-apmnt")
                                       }
                                     }}>
                                       <ListItemIcon>
@@ -1255,7 +1270,7 @@ function EditEmployee() {
                     <Col md={3}>
                     <Form.Group className="mb-3" controlId="formBasicEmail">
         <Form.Label>Date <span className="req-f">*</span></Form.Label>
-        <Form.Control type="date" placeholder="" value={editEmp?.JoiningDate} name="JoiningDate" onChange={handleChange}/>
+        <Form.Control type="date" placeholder="" value={moment((editEmp?.JoiningDate))?.format("YYYY-MM-DD")} name="JoiningDate" onChange={handleChange}/>
        
       </Form.Group>
                     </Col>
@@ -1299,7 +1314,7 @@ function EditEmployee() {
                     <Col md={3}>
                     <Form.Group className="mb-3" controlId="formBasicEmail">
         <Form.Label>Date of birth</Form.Label>
-        <Form.Control type="date" placeholder="" value={editEmp?.BirthDate} name="BirthDate" onChange={handleChange}/>
+        <Form.Control type="date" placeholder="" value={moment((editEmp?.BirthDate))?.format("YYYY-MM-DD")} name="BirthDate" onChange={handleChange}/>
        
       </Form.Group>
                     </Col>

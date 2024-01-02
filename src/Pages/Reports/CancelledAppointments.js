@@ -36,7 +36,7 @@ import FileCopyIcon from "@mui/icons-material/FileCopy";
 import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import { Avatar, Tooltip } from "@mui/material";
-import { Card, Col, Row, Modal, Form, Table, Tabs, Tab,Spinner } from "react-bootstrap";
+import { Card, Col, Row, Modal, Form, Table, Tabs, Tab,Spinner, Nav } from "react-bootstrap";
 import MaterialReactTable from "material-react-table";
 // import "../../index.css";
 import { Delete, Edit } from "@mui/icons-material";
@@ -69,6 +69,9 @@ import addTmnt from "../../Assets/addtmt.png";
 import addColl from "../../Assets/addcoln.png";
 import { CSVLink, CSVDownload } from "react-csv";
 import { LiaDownloadSolid } from "react-icons/lia";
+import { AiOutlineEye } from 'react-icons/ai';
+
+
 
 const drawerWidth = 240;
 
@@ -159,123 +162,134 @@ const StyledMenu = styled((props) => (
     },
   },
 }));
-function EnquiryToPatient() {
-  const [datedata, setdatedata] = useState({
-    startDate:"",
-    endDate:""
-  })
-  let Role=sessionStorage.getItem("RoleId");
 
+function CancelledAppointments() {
+    let Role=sessionStorage.getItem("RoleId");
 
-  const handleDates=(e)=>{
-    const newdata={...datedata};
-    newdata[e.target.name]=e.target.value;
-    setdatedata(newdata);
-    console.log(newdata);
-  }
-
-    const navigate=useNavigate();
-    const [createModalOpen, setCreateModalOpen] = useState(false);
-
-    const theme = useTheme();
-    const [open, setOpen] = React.useState(false);
-  
-    const handleDrawerOpen = () => {
-      setOpen(true);
-    };
-  
-    const handleDrawerClose = () => {
-      setOpen(false);
-    };
-    const [anchorEl, setAnchorEl] = React.useState(null);
-    const op = Boolean(anchorEl);
-    const handleClick = (event) => {
-      setAnchorEl(event.currentTarget);
-    };
-    const handleClose = () => {
-      setAnchorEl(null);
-    };
-
-    // let Role=sessionStorage.getItem("RoleId");
+    const [datedata, setdatedata] = useState({
+        startDate:"",
+        endDate:"",
+        branch:"",
+        doctor:"",
+        payment:""
+      })
+    
+    
+      const handleDates=(e)=>{
+        const newdata={...datedata};
+        newdata[e.target.name]=e.target.value;
+        setdatedata(newdata);
+        console.log(newdata);
+      }
+    
+    
+        const navigate=useNavigate();
+        const [createModalOpen, setCreateModalOpen] = useState(false);
+    
+        const theme = useTheme();
+        const [open, setOpen] = React.useState(false);
+      
+        const handleDrawerOpen = () => {
+          setOpen(true);
+        };
+      
+        const handleDrawerClose = () => {
+          setOpen(false);
+        };
+        const [anchorEl, setAnchorEl] = React.useState(null);
+        const op = Boolean(anchorEl);
+        const handleClick = (event) => {
+          setAnchorEl(event.currentTarget);
+        };
+        const handleClose = () => {
+          setAnchorEl(null);
+        };
+    
+        // let Role=sessionStorage.getItem("RoleId");
 
     let User=Role=="1"?0:Role=="11"?0:sessionStorage.getItem("UserId")
-
-  const [E2P, setE2P] = useState([]);
-
-  const getE2PUrl=`https://reviveapplication.com/ReviveAPI/Revive.svc/GetEnquiryToPConversion/0/0/${User}`;
-useEffect(()=>{
-  fetch(getE2PUrl)
-  .then((res)=>res.json())
-  .then((geteRes)=>{
-    console.log(geteRes.Data);
-    setE2P(geteRes.Data)
-  })
-},[])
-
-
-    const columns = useMemo(
-        () => [
-          // {
-          //   accessorKey: "UserID",
-          //   header: "User ID",
-          //   muiTableHeadCellFilterTextFieldProps: { placeholder: "User ID" },
-            
-          // },
-          // {
-          //   accessorKey: "DoctorName",
-          //   header: "Doctor Name",
-          //   // Cell:({cell})=>{
-          //   //   let imurl=cell.getValue();
-
-          //   //   return <div>{<img src={imurl?imurl:"https://swargworld.com/wp-content/uploads/2017/01/No_image_available.jpg"} width={150} height={150}/>}</div>
-          //   // }
-          // },
-          {
-            accessorKey: "LeadName",
-            header: "Patient Name",
-          },
-          {
-            accessorKey: "EnquiryDate",
-            header: "Enquiry Date",
-            Cell:({cell})=>{
-              let date=cell.getValue();
-              return <div>{date.split(" ")[0]}</div>
-            },
-            filterFn: (row, id, filterValue) =>
-        row.getValue(id).startsWith(filterValue),
-          },
-          {
-            accessorKey: "NumberOfFollowup",
-            header: "Number Of Followups",
-          },
-          {
-            accessorKey: "NoOfDaysToConvert",
-            header: "Days to Convert",
-          },
-          {
-            accessorKey: "AssignedToUser",
-            header: "Assigned to",
-            // Cell:({cell})=>{
-            //   let date=cell.getValue();
-            //   return <div>{date.split(" ")[0]}</div>
-            // }
-          },
-          {
-            accessorKey: "Status",
-            header: "Status",
-          },
+    
+      const [apmnts, setApmnts] = useState([]);
+    
+      const getCollUrl=`https://reviveapplication.com/ReviveAPI/Revive.svc/GetAppointmentCancellation/0/0/${User}`;
+    useEffect(()=>{
+      fetch(getCollUrl)
+      .then((res)=>res.json())
+      .then((geteRes)=>{
+        console.log(geteRes.Data);
+        setApmnts(geteRes.Data)
+      })
+    },[])
+    
+    
+    
+        const columns = useMemo(
+            () => [
+              // {
+              //   accessorKey: "UserID",
+              //   header: "User ID",
+              //   muiTableHeadCellFilterTextFieldProps: { placeholder: "User ID" },
+                
+              // },
+              {
+                accessorKey: "Name",
+                header: "Name",
+                // Cell:({cell})=>{
+                //   let imurl=cell.getValue();
+    
+                //   return <div>{<img src={imurl?imurl:"https://swargworld.com/wp-content/uploads/2017/01/No_image_available.jpg"} width={150} height={150}/>}</div>
+                // }
+              },
+              {
+                accessorKey: "DateOfBooking",
+                header: "Date of appointment",
+                filterFn: (row, id, filterValue) =>
+            row.getValue(id).startsWith(filterValue),
+              },
+              {
+                accessorKey: "DateOfCancellation",
+                header: "Date Of Cancellation",
+                filterFn: (row, id, filterValue) =>
+            row.getValue(id).startsWith(filterValue),
+              },
+             
+              {
+                accessorKey: "Reason",
+                header: "Reason",
+                // Cell:({cell})=>{
+                //   let date=cell.getValue();
+                //   return <div>{date.split(" ")[0]}</div>
+                // }
+              },
+            //   {
+            //     accessorKey: "AmountPaid",
+            //     header: "Paid Amount",
+            //   },
+            //   {
+            //     accessorKey: "PayDate",
+            //     header: "Paid Date",
+            //     // Cell:({cell})=>{
+            //     //   let date=cell.getValue();
+            //     //   return <div>{date.split(" ")[0]}</div>
+            //     // },
+            //     filterFn: (row, id, filterValue) =>
+            // row.getValue(id).startsWith(filterValue),
+            //   },
+            //   {
+            //     accessorKey: "PaymentMode",
+            //     header: "Payment Mode",
+            //   },
+             
+             
+          
+            ],
+            []
+          );
         
          
-         
-      
-        ],
-        []
-      );
     
-     
-
-      const [parentMenu, setparentMenu] = useState([]);
-
+          const [parentMenu, setparentMenu] = useState([]);
+    
       const [mainMenu, setmainMenu] = useState([]);
     
       const [clinicSetting, setclinicSetting] = useState([]);
@@ -292,7 +306,7 @@ useEffect(()=>{
     
       const [menuList, setMenuList] = useState([]);
     
-  const menuUrl = `https://reviveapplication.com/ReviveAPI/Revive.svc/GetMenuAccess/${Role}`;
+      const menuUrl = `https://reviveapplication.com/ReviveAPI/Revive.svc/GetMenuAccess/${Role}`;
       useEffect(() => {
         fetch(menuUrl)
           .then((res) => res.json())
@@ -326,46 +340,100 @@ useEffect(()=>{
           });
       }, []);
     
+    
+      const [open1, setOpen1] = React.useState(false);
+    
+      const handleMenuClick = () => {
+        setOpen1(!open1);
+      };
+      const [open2, setOpen2] = React.useState(false);
+    
+      const handleCsClick = () => {
+        setOpen2(!open2);
+      };
+      
+      const [open3, setOpen3] = React.useState(false);
+    
+      const handleTreatClick = () => {
+        setOpen3(!open3);
+      };
+      const [open4, setOpen4] = React.useState(false);
+    
+      const handleUserClick = () => {
+        setOpen4(!open4);
+      };
+      const [open5, setOpen5] = React.useState(false);
+    
+      const handleLpClick = () => {
+        setOpen5(!open5);
+      };
+      const [open6, setOpen6] = React.useState(false);
+    
+      const handleApClick = () => {
+        setOpen6(!open6);
+      };
+      const [open7, setOpen7] = React.useState(false);
+    
+      const handleReportClick = () => {
+        setOpen7(!open7);
+      };
 
-  const [open1, setOpen1] = React.useState(false);
 
-  const handleMenuClick = () => {
-    setOpen1(!open1);
-  };
-  const [open2, setOpen2] = React.useState(false);
 
-  const handleCsClick = () => {
-    setOpen2(!open2);
-  };
-  
-  const [open3, setOpen3] = React.useState(false);
+      const [branches, setbranches] = useState([]);
 
-  const handleTreatClick = () => {
-    setOpen3(!open3);
-  };
-  const [open4, setOpen4] = React.useState(false);
 
-  const handleUserClick = () => {
-    setOpen4(!open4);
-  };
-  const [open5, setOpen5] = React.useState(false);
+      const [doctors, setdoctors] = useState([]);
 
-  const handleLpClick = () => {
-    setOpen5(!open5);
-  };
-  const [open6, setOpen6] = React.useState(false);
+      const [paymentModes, setpaymentModes] = useState([]);
 
-  const handleApClick = () => {
-    setOpen6(!open6);
-  };
-  const [open7, setOpen7] = React.useState(false);
 
-  const handleReportClick = () => {
-    setOpen7(!open7);
-  };
+      const branchUrl=`https://reviveapplication.com/ReviveAPI/Revive.svc/GetCheckClinicProfile/0/0`;
+
+      const drUrl=`https://reviveapplication.com/ReviveAPI/Revive.svc/GetUserList`;
+
+      const paymentUrl=`https://reviveapplication.com/ReviveAPI/Revive.svc/GetPaymentMode`;
+
+
+      useEffect(()=>{
+        fetch(branchUrl)
+        .then((res)=>res.json())
+        .then((result)=>{
+            console.log(result);
+            setbranches(result.Data)
+        })
+      },[])
+
+
+      useEffect(()=>{
+fetch(drUrl)
+.then((res)=>res.json())
+.then((result)=>{
+    console.log(result);
+    setdoctors(result.Data)
+})
+      },[])
+
+
+      useEffect(()=>{
+        fetch(paymentUrl)
+        .then((res)=>res.json())
+        .then((result)=>{
+            console.log(result);
+            setpaymentModes(result.Data)
+        })
+      },[])
+      
+
+
+      
+
+    //   let Total;
+
+    //   Total=Colln.reduce((total, payment) => total + parseFloat(payment.AmountPaid), 0);
   return (
-    <>
-     <Box sx={{ display: 'flex' }}>
+   <>
+   <Box sx={{ display: 'flex' }}>
       <CssBaseline />
       <AppBar position="fixed" open={open} className="navigBar">
           <Toolbar>
@@ -892,9 +960,10 @@ useEffect(()=>{
        <Card className="m-1 mt-3 emp-crd p-3">
         <Row>
             <Col>
-            <p className="ap-t">Enquiry to Patient Conversion</p>
+            <p className="ap-t">Cancelled Appointments</p>
             <hr />
-        <Row className="mt-4">
+
+            <Row className="mt-4">
           <Col>
           <div className='d-flex flex-wrap'>
           <Form.Group className="mb-3" controlId="formBasicEmail">
@@ -912,12 +981,12 @@ useEffect(()=>{
       <Button variant='' className='mx-3 rptBtn mt-4' onClick={(e)=>{
         e.preventDefault();
 
-        const datefiltered=`https://reviveapplication.com/ReviveAPI/Revive.svc/GetEnquiryToPConversion/${datedata?.startDate}/${datedata?.endDate}`
+        const datefiltered=`https://reviveapplication.com/ReviveAPI/Revive.svc/GetAppointmentCancellation/${datedata?.startDate}/${datedata?.endDate}/${User}`
         fetch(datefiltered)
         .then((res)=>res.json())
         .then((geteRes)=>{
           console.log(geteRes.Data);
-          setE2P(geteRes.Data)
+          setApmnts(geteRes.Data)
         })
 
       }}>Search</Button>
@@ -925,7 +994,6 @@ useEffect(()=>{
           </div>
           </Col>
         </Row>
-
             {/* <Row className="p-5">
                 <Col>
                 <p className="text-center hpathy-nodata mb-1">No Data available</p>
@@ -939,16 +1007,14 @@ useEffect(()=>{
                     </Row>
                 </Col>
             </Row> */}
-
-
 <div className='d-flex justify-content-between m-2'>
-  <CSVLink data={E2P} style={{textDecoration:"none",color:"white",backgroundColor:"green",borderRadius:"5px"}} className='p-2'><LiaDownloadSolid fontSize={25}/>Excel</CSVLink>
+  <CSVLink data={apmnts} style={{textDecoration:"none",color:"white",backgroundColor:"green",borderRadius:"5px"}} className='p-2'><LiaDownloadSolid fontSize={25}/>Excel</CSVLink>
   {/* <p className='text-end'><b>Total :</b>{Total}</p> */}
 </div>
 
             <MaterialReactTable
                   columns={columns}
-                  data={E2P}
+                  data={apmnts}
                   initialState={{ showColumnFilters: true }} //show filters by default
                   
                   muiTableHeadCellFilterTextFieldProps={{
@@ -996,8 +1062,8 @@ useEffect(()=>{
        </Card>
       </Main>
     </Box>
-    </>
+   </>
   )
 }
 
-export default EnquiryToPatient
+export default CancelledAppointments

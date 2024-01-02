@@ -236,7 +236,7 @@ let EnqId=sessionStorage.getItem("EnqId");
           },
           {
             accessorKey: "FollowUpMode",
-            header: "Follow up Mode",
+            header: "Follow-up Mode",
           },
           {
             accessorKey: "ConversationDetails",
@@ -244,11 +244,23 @@ let EnqId=sessionStorage.getItem("EnqId");
           },
           {
             accessorKey: "FollowUpStatus",
-            header: "Follow up Status",
+            header: "Follow-up Status",
           },
           {
             accessorKey: "FollowUpBy",
-            header: "Follow up By",
+            header: "Follow-up By",
+          },
+          {
+            accessorKey: "NextFollowUpDate",
+            header: "Next Follow-up Date",
+            Cell:({cell})=>{
+              let cdate=cell.getValue()
+              return(
+                <>
+                <div>{cdate.split(" ")[0]}</div>
+                </>
+              )
+            }
           },
           
        
@@ -300,9 +312,9 @@ let EnqId=sessionStorage.getItem("EnqId");
       const addfUrl=`https://reviveapplication.com/ReviveAPI/Revive.svc/AddNewFollowup`;
 
 
-      if(fup?.NextFollowUpDate==="" || fup?.FollowUpStatus==="" || fup?.ConversationDetails==="" || fup?.Rating==="" || fup?.Remarks===""){
+      if((fup?.FollowUpStatus!="1" && fup?.NextFollowUpDate==="") || fup?.FollowUpStatus==="" || fup?.ConversationDetails==="" || fup?.Rating==="" || fup?.Remarks===""){
         Swal.fire({
-          icon:"error",
+          icon:"warning",
           title:"Please fill all the fields marked with red *"
         })
       }
@@ -596,7 +608,10 @@ useEffect(() => {
                     <ListItemButton
                       key={i}
                       onClick={() => {
-                         if (parent?.MenuName === "Menu") {
+                         if(parent?.MenuName === "Dashboard"){
+                         Role=="1"?navigate("/dashboard"):navigate("/dashboard2")
+                        }
+                         else if (parent?.MenuName === "Menu") {
                           handleMenuClick();
                         } else if (parent?.MenuName === "Leads/Patients") {
                           handleLpClick();
@@ -926,7 +941,7 @@ useEffect(() => {
                                 return (
                                   <>
                                      <ListItemButton sx={{ pl: 3 }} onClick={()=>{
-                                      if(rpt?.MenuName==="Enquiry To Patient Conversions"){
+                                     if(rpt?.MenuName==="Enquiry To Patient Conversions"){
                                         navigate("/e2p")
                                       }
                                       else if(rpt?.MenuName==="Patients Treatment"){
@@ -946,6 +961,18 @@ useEffect(() => {
                                       }
                                       else if(rpt?.MenuName==="Consultation Report"){
                                         navigate("/consult-rpt")
+                                      }
+                                      else if(rpt?.MenuName==="Invoice Report"){
+                                        navigate("/inv-rpt")
+                                      }
+                                      else if(rpt?.MenuName==="Collection Report"){
+                                        navigate("/clln-rpt")
+                                      }
+                                      else if(rpt?.MenuName==="Activity Report"){
+                                        navigate("/activity-rpt")
+                                      }
+                                      else if(rpt?.MenuName==="Appointment Cancellation Report"){
+                                        navigate("/cancelled-apmnt")
                                       }
                                     }}>
                                       <ListItemIcon>
@@ -1168,13 +1195,13 @@ useEffect(() => {
       </Form.Group>
                     </Col>
 
-                    <Col md={3}>
+                 { fup?.FollowUpStatus=="1"?"":<Col md={3}>
                     <Form.Group className="mb-3" controlId="formBasicEmail">
         <Form.Label>Next Follow Up Date <span className="req-f">*</span></Form.Label>
         <Form.Control type="date" placeholder="" name="NextFollowUpDate" value={fup.NextFollowUpDate} onChange={(e)=>handleChange(e)}/>
       
       </Form.Group>
-                    </Col>
+                    </Col>}
                 </Row>
 
                 <Row>

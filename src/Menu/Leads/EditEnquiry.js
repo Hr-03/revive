@@ -412,25 +412,25 @@ const handle=(e)=>{
     let pt=document.getElementById("pnt");
     let fp=document.getElementById("flup");
 
-let followupDate=fd.value
+// let followupDate=fd.value
 
-    if(pt.checked){
-      setEditEnq((pre)=>{
-        return{
-          ...pre,
-          FollowUpDate:""
-        }
-      })
-    }
+    // if(pt.checked){
+    //   setEditEnq((pre)=>{
+    //     return{
+    //       ...pre,
+    //       FollowUpDate:""
+    //     }
+    //   })
+    // }
     
-    if(fp.checked){
-      setEditEnq((pre)=>{
-        return{
-          ...pre,
-          FollowUpDate:followupDate
-        }
-      })
-    }
+    // if(fp.checked){
+    //   setEditEnq((pre)=>{
+    //     return{
+    //       ...pre,
+    //       FollowUpDate:followupDate
+    //     }
+    //   })
+    // }
 
     if(firstn===true){
       
@@ -861,7 +861,10 @@ seteditablecity(result.Data[0]?.CityName)
                     <ListItemButton
                       key={i}
                       onClick={() => {
-                         if (parent?.MenuName === "Menu") {
+                         if(parent?.MenuName === "Dashboard"){
+                         Role=="1"?navigate("/dashboard"):navigate("/dashboard2")
+                        }
+                         else if (parent?.MenuName === "Menu") {
                           handleMenuClick();
                         } else if (parent?.MenuName === "Leads/Patients") {
                           handleLpClick();
@@ -1191,7 +1194,7 @@ seteditablecity(result.Data[0]?.CityName)
                                 return (
                                   <>
                                      <ListItemButton sx={{ pl: 3 }} onClick={()=>{
-                                      if(rpt?.MenuName==="Enquiry To Patient Conversions"){
+                                     if(rpt?.MenuName==="Enquiry To Patient Conversions"){
                                         navigate("/e2p")
                                       }
                                       else if(rpt?.MenuName==="Patients Treatment"){
@@ -1211,6 +1214,18 @@ seteditablecity(result.Data[0]?.CityName)
                                       }
                                       else if(rpt?.MenuName==="Consultation Report"){
                                         navigate("/consult-rpt")
+                                      }
+                                      else if(rpt?.MenuName==="Invoice Report"){
+                                        navigate("/inv-rpt")
+                                      }
+                                      else if(rpt?.MenuName==="Collection Report"){
+                                        navigate("/clln-rpt")
+                                      }
+                                      else if(rpt?.MenuName==="Activity Report"){
+                                        navigate("/activity-rpt")
+                                      }
+                                      else if(rpt?.MenuName==="Appointment Cancellation Report"){
+                                        navigate("/cancelled-apmnt")
                                       }
                                     }}>
                                       <ListItemIcon>
@@ -1547,14 +1562,14 @@ seteditablecity(result.Data[0]?.CityName)
             </Row>
 
             <Row>
-                <Col md={3}>
+                {/* <Col md={3}>
         <Form.Label>Patient/Follow up</Form.Label>
 
                 <Row>
                     <Col> <Form.Check type="radio" name="IsPatient" id="pnt" aria-label="option 1" label="Patient"  checked={`${editEnq?.IsPatient==="1"?"checked":""}`} value="Patient" onChange={(e) => handleIsPatient(e)}/></Col>
                     <Col> <Form.Check type="radio" name="IsPatient" id="flup" aria-label="option 1" label="Follow Up"  checked={`${editEnq?.IsPatient==="0"?"checked":""}`} value="Follow Up" onChange={(e) => handleIsPatient(e)}/></Col>
                 </Row>
-                </Col>
+                </Col> */}
 
                 <Col md={3}>
         <Form.Label>Interest Level</Form.Label>
@@ -1569,7 +1584,7 @@ seteditablecity(result.Data[0]?.CityName)
                 <Col md={3}id="fupdate" style={{display:"none"}}>
                 <Form.Group className="mb-3" controlId="formBasicEmail">
         <Form.Label>Followup date</Form.Label>
-        <Form.Control type="date" name="FollowUpDate" id="fupDate" value={editEnq?.FollowUpDate} onChange={(e) => handle(e)}/>
+        <Form.Control type="date" name="FollowUpDate" id="fupDate" value={moment((editEnq?.FollowUpDate))?.format("YYYY-MM-DD")} onChange={(e) => handle(e)}/>
       
       </Form.Group>
                 </Col>

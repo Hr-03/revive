@@ -289,6 +289,10 @@ let invNo=sessionStorage.getItem("InvNo");
 
 const [invoiceDetails, setinvoiceDetails] = useState([]);
 
+const [paymentModes, setpaymentModes] = useState([])
+
+const [totals, settotals] = useState([])
+
 
 useEffect(()=>{
 fetch(invURl)
@@ -296,6 +300,9 @@ fetch(invURl)
 .then((result)=>{
   console.log(result.Data[0]);
   setinvoiceDetails(result.Data[0]);
+  setpaymentModes(result.Data[0]?.PaymentModeTs[0])
+  settotals(result.Data[0]?.TotalTs[0])
+
 })
 },[])
 
@@ -462,7 +469,10 @@ const reactToPrintTrigger = React.useCallback(() => {
                     <ListItemButton
                       key={i}
                       onClick={() => {
-                         if (parent?.MenuName === "Menu") {
+                         if(parent?.MenuName === "Dashboard"){
+                         Role=="1"?navigate("/dashboard"):navigate("/dashboard2")
+                        }
+                         else if (parent?.MenuName === "Menu") {
                           handleMenuClick();
                         } else if (parent?.MenuName === "Leads/Patients") {
                           handleLpClick();
@@ -792,7 +802,7 @@ const reactToPrintTrigger = React.useCallback(() => {
                                 return (
                                   <>
                                      <ListItemButton sx={{ pl: 3 }} onClick={()=>{
-                                      if(rpt?.MenuName==="Enquiry To Patient Conversions"){
+                                     if(rpt?.MenuName==="Enquiry To Patient Conversions"){
                                         navigate("/e2p")
                                       }
                                       else if(rpt?.MenuName==="Patients Treatment"){
@@ -812,6 +822,18 @@ const reactToPrintTrigger = React.useCallback(() => {
                                       }
                                       else if(rpt?.MenuName==="Consultation Report"){
                                         navigate("/consult-rpt")
+                                      }
+                                      else if(rpt?.MenuName==="Invoice Report"){
+                                        navigate("/inv-rpt")
+                                      }
+                                      else if(rpt?.MenuName==="Collection Report"){
+                                        navigate("/clln-rpt")
+                                      }
+                                      else if(rpt?.MenuName==="Activity Report"){
+                                        navigate("/activity-rpt")
+                                      }
+                                      else if(rpt?.MenuName==="Appointment Cancellation Report"){
+                                        navigate("/cancelled-apmnt")
                                       }
                                     }}>
                                       <ListItemIcon>
@@ -918,7 +940,7 @@ const reactToPrintTrigger = React.useCallback(() => {
                     <p>Billed to,</p>
                     <p><b>{invoiceDetails?.PatientName}</b></p>
                     <p>{invoiceDetails?.Gender}, {invoiceDetails?.Age}</p>
-                    <p>Patient No.: 01552 </p>
+                    <p>Patient No.: {invoiceDetails?.PatientNo} </p>
                 </div>
                 </Col>
                 <Col>
@@ -986,12 +1008,12 @@ const reactToPrintTrigger = React.useCallback(() => {
                 </Col>
                 <Col>
                 <div style={{float:"right"}}>
-                <p>{invoiceDetails?.Total}</p>
-                <p>{invoiceDetails?.Discount}</p>
-                <p>{invoiceDetails?.TotalTax}</p>
-                <p>{invoiceDetails?.TotalAmount}</p>
-                <p>{invoiceDetails?.ReceivedAmount}</p>
-                <p>{invoiceDetails?.BalanceAmount}</p>
+                <p>{totals?.Total}</p>
+                <p>{totals?.Discount}</p>
+                <p>{totals?.TotalTax}</p>
+                <p>{totals?.TotalAmount}</p>
+                <p>{totals?.ReceivedAmount}</p>
+                <p>{totals?.TotalAmount-totals?.ReceivedAmount}</p>
                 </div>
                 </Col>
             </Row>
@@ -999,15 +1021,22 @@ const reactToPrintTrigger = React.useCallback(() => {
     </Col>
 </Row>
 
+{
+   paymentModes?.PaymentMode!=="Cash"?
 <Table responsive className='mt-5'>
           <thead className='invTH'>
             <tr>
                 <th className='invth'>Sr no.</th>
                 <th className='invth'>Date</th>
                 <th className='invth'>Payment Mode</th>
+                <th className='invth'>Bank Name</th>
+                <th className='invth'>Branch Name</th>
+              {paymentModes?.PaymentMode!=="UPI"? "": <th className='invth'>Transaction ID</th>}
+              {paymentModes?.PaymentMode!=="UPI"? "":<th className='invth'>UTR No.</th>}
+                <th className='invth'>Transaction Date</th>
                 <th className='invth'>Grand Total</th>
                 <th className='invth'>Received Amount (in ₹) </th>
-                {/* <th className='invth'>Total Cost</th> */}
+          
             </tr>
           </thead>
 
@@ -1019,11 +1048,16 @@ const reactToPrintTrigger = React.useCallback(() => {
                   <>
                    <tr>
                 <td className='invtd'>{i+1}</td>
-                <td className='invtd'>{p?.Date?.split(" ")[0]}</td>
+                <td className='invtd'>{p?.Date}</td>
                 <td className='invtd'>{p?.PaymentMode}</td>
+                <td className='invtd'>{p?.BankName}</td>
+                <td className='invtd'>{p?.BranchName}</td>
+                {paymentModes?.PaymentMode!=="UPI"? "":<td className='invtd'>{p?.TransactionID}</td>}
+                {paymentModes?.PaymentMode!=="UPI"? "":<td className='invtd'>{p?.UTRno}</td>}
+                <td className='invtd'>{p?.TransactionDate}</td>
                 <td className='invtd'>{p?.GrandTotal}</td>
                 <td className='invtd'>{p?.ReceivedAmount}</td>
-                {/* <td className='invtd'>1000.00</td> */}
+             
             </tr>
                   </>
                 )
@@ -1033,9 +1067,41 @@ const reactToPrintTrigger = React.useCallback(() => {
           
           </tbody>
          </Table>
+         :
+         <Table responsive className='mt-5'>
+          <thead className='invTH'>
+            <tr>
+              <th className='invth'>Sr no.</th>
+              <th className='invth'>Payment Mode</th>
+              <th className='invth'>Date</th>
+              <th className='invth'>Grand Total</th>
+              <th className='invth'>Received Amount</th>
+              <th className='invth'>Pending Amount</th>
+            </tr>
+          </thead>
 
+          <tbody className='invTB'>
+            {
+              invoiceDetails?.PaymentModeTs?.map((cash,i)=>{
+                return(
+                  <>
+                  <tr>
+                    <td className='invtd'>{i+1}</td>
+                    <td className='invtd'>{cash?.PaymentMode}</td>
+                    <td className='invtd'>{cash?.Date.split(" ")[0]}</td>
+                    <td className='invtd'>{cash?.GrandTotal}</td>
+                    <td className='invtd'>{cash?.ReceivedAmount}</td>
+                    <td className='invtd'>{cash?.GrandTotal-cash?.ReceivedAmount}</td>
+                  </tr>
+                  </>
+                )
+              })
+            }
+          </tbody>
+         </Table>
+}
 
-         <p className='text-end pb-4'><b>Received Amount (in words) </b><span>{invoiceDetails?.ReceivedAmountInW}</span></p>
+         <p className='text-end pb-4'><b>Received Amount (in words) </b><span>{totals?.ReceivedAmountInW}</span></p>
 
 
          <p className='text-end mt-5 pt-5'><b>Authorized Signatory</b></p>

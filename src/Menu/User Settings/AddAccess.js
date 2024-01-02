@@ -555,10 +555,22 @@ function AddAccess() {
     IPAddress:"1"
   });
 
+  const [menuAccess, setMenuAccess] = useState([]);
+
+
   const handleChange = (e) => {
     const newdata = { ...addAccess };
     newdata[e.target.name] = e.target.value;
     setAddAccess(newdata);
+
+
+
+    fetch(`https://reviveapplication.com/ReviveAPI/Revive.svc/GetRoleMenuList/${newdata?.RoleID}`)
+    .then((res)=>res.json())
+    .then((result)=>{
+      console.log(result);
+setMenuAccess(result.Data)
+    })
     // console.log(newdata);
 
     // let perm = document.getElementById("menuAP");
@@ -743,18 +755,17 @@ function AddAccess() {
     })
   }
 
-  const [menuAccess, setMenuAccess] = useState([]);
 
-  const menuAccessUrl = `https://reviveapplication.com/ReviveAPI/Revive.svc/GetMenuList`;
+  // const menuAccessUrl = `https://reviveapplication.com/ReviveAPI/Revive.svc/GetMenuList`;
 
-  useEffect(() => {
-    fetch(menuAccessUrl)
-      .then((res) => res.json())
-      .then((menuaccRes) => {
-        console.log(menuaccRes.Data);
-        setMenuAccess(menuaccRes.Data);
-      });
-  }, []);
+  // useEffect(() => {
+  //   fetch(menuAccessUrl)
+  //     .then((res) => res.json())
+  //     .then((menuaccRes) => {
+  //       console.log(menuaccRes.Data);
+  //       setMenuAccess(menuaccRes.Data);
+  //     });
+  // }, []);
 
   const [open1, setOpen1] = React.useState(false);
 
@@ -889,7 +900,10 @@ function AddAccess() {
                     <ListItemButton
                       key={i}
                       onClick={() => {
-                         if (parent?.MenuName === "Menu") {
+                         if(parent?.MenuName === "Dashboard"){
+                         Role=="1"?navigate("/dashboard"):navigate("/dashboard2")
+                        }
+                         else if (parent?.MenuName === "Menu") {
                           handleMenuClick();
                         } else if (parent?.MenuName === "Leads/Patients") {
                           handleLpClick();
@@ -1219,7 +1233,7 @@ function AddAccess() {
                                 return (
                                   <>
                                      <ListItemButton sx={{ pl: 3 }} onClick={()=>{
-                                      if(rpt?.MenuName==="Enquiry To Patient Conversions"){
+                                     if(rpt?.MenuName==="Enquiry To Patient Conversions"){
                                         navigate("/e2p")
                                       }
                                       else if(rpt?.MenuName==="Patients Treatment"){
@@ -1239,6 +1253,18 @@ function AddAccess() {
                                       }
                                       else if(rpt?.MenuName==="Consultation Report"){
                                         navigate("/consult-rpt")
+                                      }
+                                      else if(rpt?.MenuName==="Invoice Report"){
+                                        navigate("/inv-rpt")
+                                      }
+                                      else if(rpt?.MenuName==="Collection Report"){
+                                        navigate("/clln-rpt")
+                                      }
+                                      else if(rpt?.MenuName==="Activity Report"){
+                                        navigate("/activity-rpt")
+                                      }
+                                      else if(rpt?.MenuName==="Appointment Cancellation Report"){
+                                        navigate("/cancelled-apmnt")
                                       }
                                     }}>
                                       <ListItemIcon>

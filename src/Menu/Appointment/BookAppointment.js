@@ -210,7 +210,7 @@ const enq=()=>{
 
 
 
-const pntbUrl=`https://reviveapplication.com/ReviveAPI/Revive.svc/GetAppointmentList/1/0/0`;
+const pntbUrl=`https://reviveapplication.com/ReviveAPI/Revive.svc/GetAppointmentList/1/${User}/0`;
 
 
 const pnt=()=>{
@@ -226,13 +226,13 @@ const pnt=()=>{
 }
 
 
-useEffect(()=>{
-enq();
-})
+// useEffect(()=>{
+// enq();
+// })
 
-useEffect(()=>{
-pnt();
-})
+// useEffect(()=>{
+// pnt();
+// })
 
 
     const columns = useMemo(
@@ -505,7 +505,10 @@ pnt();
                     <ListItemButton
                       key={i}
                       onClick={() => {
-                         if (parent?.MenuName === "Menu") {
+                         if(parent?.MenuName === "Dashboard"){
+                         Role=="1"?navigate("/dashboard"):navigate("/dashboard2")
+                        }
+                         else if (parent?.MenuName === "Menu") {
                           handleMenuClick();
                         } else if (parent?.MenuName === "Leads/Patients") {
                           handleLpClick();
@@ -835,7 +838,7 @@ pnt();
                                 return (
                                   <>
                                      <ListItemButton sx={{ pl: 3 }} onClick={()=>{
-                                      if(rpt?.MenuName==="Enquiry To Patient Conversions"){
+                                     if(rpt?.MenuName==="Enquiry To Patient Conversions"){
                                         navigate("/e2p")
                                       }
                                       else if(rpt?.MenuName==="Patients Treatment"){
@@ -855,6 +858,18 @@ pnt();
                                       }
                                       else if(rpt?.MenuName==="Consultation Report"){
                                         navigate("/consult-rpt")
+                                      }
+                                      else if(rpt?.MenuName==="Invoice Report"){
+                                        navigate("/inv-rpt")
+                                      }
+                                      else if(rpt?.MenuName==="Collection Report"){
+                                        navigate("/clln-rpt")
+                                      }
+                                      else if(rpt?.MenuName==="Activity Report"){
+                                        navigate("/activity-rpt")
+                                      }
+                                      else if(rpt?.MenuName==="Appointment Cancellation Report"){
+                                        navigate("/cancelled-apmnt")
                                       }
                                     }}>
                                       <ListItemIcon>
@@ -959,9 +974,13 @@ pnt();
                           let enqId = cell.row.original.EnquiryID;
                           let mbl = cell.row.original.Mobile;
                           let name = cell.row.original.Name;
+                          let dob = cell.row.original.DateOfBirth.split(" ")[0];
+                          let gender = cell.row.original.Gender;
                           sessionStorage.setItem("bookEnqId",enqId);
                           sessionStorage.setItem("bookmbl",mbl);
                           sessionStorage.setItem("bookname",name);
+                          sessionStorage.setItem("bookDOB",dob);
+                          sessionStorage.setItem("bookGender",gender)
                           navigate(`/book-apmt/${enqId}`);
                         }}>Book</Button>
                       {/* </Tooltip> */}
@@ -990,10 +1009,10 @@ pnt();
 
                     <Row>
                         <Col>
-                        <Form.Check type="radio" aria-label="radio 1" name="apmt" id="enq" label="Enquiry" defaultChecked/>
+                        <Form.Check type="radio" aria-label="radio 1" name="apmt" id="enq" label="Enquiry" onChange={()=>enq()}/>
                         </Col>
                         <Col>
-                        <Form.Check type="radio" aria-label="radio 1" name="apmt" id="pnt" label="Patient"/>
+                        <Form.Check type="radio" aria-label="radio 1" name="apmt" id="pnt" label="Patient" onChange={()=>pnt()}/>
                         </Col>
                     </Row>
                     {/* <Button

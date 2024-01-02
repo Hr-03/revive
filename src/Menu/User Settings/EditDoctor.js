@@ -67,6 +67,7 @@ import { MdLogout } from "react-icons/md";
 import invoice from "../../Assets/invoice.png";
 import addTmnt from "../../Assets/addtmt.png";
 import addColl from "../../Assets/addcoln.png";
+import moment from 'moment';
 const drawerWidth = 240;
 
 const Main = styled("main", { shouldForwardProp: (prop) => prop !== "open" })(
@@ -1177,6 +1178,15 @@ fetch(getDetails)
         UserName:result.Data[0]?.username,
         UserID:result.Data[0]?.UserID,
         Passwords:result.Data[0]?.Passwords,
+        PersonalPhoto:result.Data[0]?.PersonalPhoto,
+        AadharCardPhoto:result.Data[0]?.AadharCardPhoto,
+        PanCardPhoto:result.Data[0]?.PanCardPhoto,
+        RegistrationPhoto:result.Data[0]?.RegistrationPhoto,
+        IndemnityProofPhoto:result.Data[0]?.IndemnityProofPhoto,
+        AadharCardNumber:result.Data[0]?.AadharCardNumber,
+        PanCard:result.Data[0]?.PanCard,
+        RegistrationNumber:result.Data[0]?.RegistrationNumber,
+        IndemnityProofNumber:result.Data[0]?.IndemnityProofNumber
         
         }
     })
@@ -1294,7 +1304,10 @@ fetch(getDetails)
                     <ListItemButton
                       key={i}
                       onClick={() => {
-                         if (parent?.MenuName === "Menu") {
+                         if(parent?.MenuName === "Dashboard"){
+                         Role=="1"?navigate("/dashboard"):navigate("/dashboard2")
+                        }
+                         else if (parent?.MenuName === "Menu") {
                           handleMenuClick();
                         } else if (parent?.MenuName === "Leads/Patients") {
                           handleLpClick();
@@ -1624,7 +1637,7 @@ fetch(getDetails)
                                 return (
                                   <>
                                      <ListItemButton sx={{ pl: 3 }} onClick={()=>{
-                                      if(rpt?.MenuName==="Enquiry To Patient Conversions"){
+                                     if(rpt?.MenuName==="Enquiry To Patient Conversions"){
                                         navigate("/e2p")
                                       }
                                       else if(rpt?.MenuName==="Patients Treatment"){
@@ -1644,6 +1657,18 @@ fetch(getDetails)
                                       }
                                       else if(rpt?.MenuName==="Consultation Report"){
                                         navigate("/consult-rpt")
+                                      }
+                                      else if(rpt?.MenuName==="Invoice Report"){
+                                        navigate("/inv-rpt")
+                                      }
+                                      else if(rpt?.MenuName==="Collection Report"){
+                                        navigate("/clln-rpt")
+                                      }
+                                      else if(rpt?.MenuName==="Activity Report"){
+                                        navigate("/activity-rpt")
+                                      }
+                                      else if(rpt?.MenuName==="Appointment Cancellation Report"){
+                                        navigate("/cancelled-apmnt")
                                       }
                                     }}>
                                       <ListItemIcon>
@@ -1886,7 +1911,7 @@ fetch(getDetails)
                             <Form.Control
                               type="date"
                               placeholder=""
-                              value={EditDoctor?.BirthDate}
+                              value={moment((EditDoctor?.BirthDate))?.format("YYYY-MM-DD")}
 
                               name="BirthDate"
                               onChange={handleChange}
@@ -1922,7 +1947,7 @@ fetch(getDetails)
                             <Form.Control
                               type="date"
                               placeholder=""
-                              value={EditDoctor?.JoiningDate}
+                              value={moment((EditDoctor?.JoiningDate))?.format("YYYY-MM-DD")}
 
                               name="JoiningDate"
                               onChange={handleChange}
@@ -2564,7 +2589,7 @@ fetch(getDetails)
                                 <Row className="mt-2">
                                   <Col>
                                     <img
-                                      src={EditDoctor?.PersonalPhoto?EditDoctor?.PersonalPhoto:"https://wallpaperaccess.com/full/1285952.jpg"}
+                                      src={EditDoctor.PersonalPhoto?EditDoctor.PersonalPhoto:"https://wallpaperaccess.com/full/1285952.jpg"}
                                       alt="image"
                                       className="img-s mt-5"
                                       // style={{float:"left"}}
@@ -2589,6 +2614,7 @@ fetch(getDetails)
                                 <Form.Control
                                   type="text"
                                   name="PanCard"
+                                  value={EditDoctor?.PanCard}
                                   className=""
                                   onChange={handleChange}
                                 />
@@ -2658,7 +2684,7 @@ fetch(getDetails)
                           <Row className="mt-5 mb-0">
                             <Col lg={2}>
                               <Form.Group controlId="formFile" className="mb-3">
-                                <Form.Label style={{ whiteSpace: "nowrap" }}>
+                                <Form.Label>
                                   Indemnity Proof
                                 </Form.Label>
                               </Form.Group>
@@ -2668,6 +2694,7 @@ fetch(getDetails)
                                 <Form.Control
                                   type="text"
                                   name="IndemnityProofNumber"
+                                  value={EditDoctor?.IndemnityProofNumber}
                                   className="iproof"
                                   onChange={handleChange}
                                 />
@@ -2739,7 +2766,7 @@ fetch(getDetails)
                           <Row>
                             <Col lg={2}>
                               <Form.Group controlId="formFile" className="mb-3">
-                                <Form.Label style={{ whiteSpace: "nowrap" }}>
+                                <Form.Label>
                                   Aadhaar Card
                                 </Form.Label>
                               </Form.Group>
@@ -2749,6 +2776,7 @@ fetch(getDetails)
                                 <Form.Control
                                   type="number"
                                   name="AadharCardNumber"
+                                  value={EditDoctor?.AadharCardNumber}
                                   onChange={handleChange}
                                 />
                               </Form.Group>
@@ -2821,6 +2849,7 @@ fetch(getDetails)
                                 <Form.Control
                                   type="text"
                                   name="RegistrationNumber"
+                                  value={EditDoctor?.RegistrationNumber}
                                   onChange={handleChange}
                                 />
                               </Form.Group>

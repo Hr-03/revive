@@ -67,6 +67,7 @@ import Swal from "sweetalert2";
 import invoice from "../../Assets/invoice.png";
 import addTmnt from "../../Assets/addtmt.png";
 import addColl from "../../Assets/addcoln.png";
+import moment from 'moment';
 
 const drawerWidth = 240;
 
@@ -207,7 +208,26 @@ function EditPatients() {
         MaritalStatus:"",
         Actions:"null",
         CreatedBy:"1",
-        IPAddress:"0"
+        IPAddress:"0",
+        Craving:"",
+    Thirst:"",
+    Sleep:"",
+    Thermals:"",
+    Covering:"",
+    UrineNStool:"",
+    Aversions:"",
+    Perspiration:"",
+    Dreams:"",
+    Bathing:"",
+    Seasons:"",
+    FH:"",
+    PersonalHistory:"",
+    Mentals:"",
+    LifespaceReactivity:"",
+    MensesTotality:"",
+    Medicine:"",
+    HairTest:"",
+    Totality:""
         
       })
     
@@ -785,6 +805,10 @@ function EditPatients() {
     const getPntDetUrl=`https://reviveapplication.com/ReviveAPI/Revive.svc/GetPatientEditInfo/${pntID}`;
 
 
+    const [selectedState, setselectedState] = useState("");
+
+    const [selectedCity, setselectedCity] = useState("")
+
     useEffect(()=>{
         fetch(getPntDetUrl)
         .then((res)=>res.json())
@@ -837,11 +861,34 @@ function EditPatients() {
         OfficeHours:result.Data[0]?.OfficeHours,
         ReasonOfWeightloss:result.Data[0]?.ReasonOfWeightloss,
         MaritalStatus:result.Data[0]?.MaritalStatus,
+        Craving:result.Data[0]?.Craving,
+        Aversions:result.Data[0]?.Aversions,
+        Thirst:result.Data[0]?.Thirst,
+        Perspiration:result.Data[0]?.Perspiration,
+        Sleep:result.Data[0]?.Sleep,
+        Dreams:result.Data[0]?.Dreams,
+        Thermals:result.Data[0]?.Thermals,
+        Bathing:result.Data[0]?.Bathing,
+        Covering:result.Data[0]?.Covering,
+        Seasons:result.Data[0]?.Seasons,
+        UrineNStool:result.Data[0]?.UrineNStool,
+        FH:result.Data[0]?.FH,
+        PersonalHistory:result.Data[0]?.PersonalHistory,
+        Mentals:result.Data[0]?.Mentals,
+        LifespaceReactivity:result.Data[0]?.LifespaceReactivity,
+        MensesTotality:result.Data[0]?.MensesTotality,
+        Totality:result.Data[0]?.Totality,
+        Medicine:result.Data[0]?.Medicine
 
                 }
             })
 
             setInputList(result.Data[0]?.objDiet)
+
+
+            setselectedState(result.Data[0]?.StateName);
+
+            setselectedCity(result.Data[0]?.CityName)
         })
     },[])
   return (
@@ -944,7 +991,10 @@ function EditPatients() {
                     <ListItemButton
                       key={i}
                       onClick={() => {
-                         if (parent?.MenuName === "Menu") {
+                         if(parent?.MenuName === "Dashboard"){
+                         Role=="1"?navigate("/dashboard"):navigate("/dashboard2")
+                        }
+                         else if (parent?.MenuName === "Menu") {
                           handleMenuClick();
                         } else if (parent?.MenuName === "Leads/Patients") {
                           handleLpClick();
@@ -1274,7 +1324,7 @@ function EditPatients() {
                                 return (
                                   <>
                                      <ListItemButton sx={{ pl: 3 }} onClick={()=>{
-                                      if(rpt?.MenuName==="Enquiry To Patient Conversions"){
+                                     if(rpt?.MenuName==="Enquiry To Patient Conversions"){
                                         navigate("/e2p")
                                       }
                                       else if(rpt?.MenuName==="Patients Treatment"){
@@ -1294,6 +1344,18 @@ function EditPatients() {
                                       }
                                       else if(rpt?.MenuName==="Consultation Report"){
                                         navigate("/consult-rpt")
+                                      }
+                                      else if(rpt?.MenuName==="Invoice Report"){
+                                        navigate("/inv-rpt")
+                                      }
+                                      else if(rpt?.MenuName==="Collection Report"){
+                                        navigate("/clln-rpt")
+                                      }
+                                      else if(rpt?.MenuName==="Activity Report"){
+                                        navigate("/activity-rpt")
+                                      }
+                                      else if(rpt?.MenuName==="Appointment Cancellation Report"){
+                                        navigate("/cancelled-apmnt")
                                       }
                                     }}>
                                       <ListItemIcon>
@@ -1443,7 +1505,7 @@ function EditPatients() {
                         <Col md={3}>
                         <Form.Group className="mb-3" controlId="formBasicEmail">
         <Form.Label>Enquiry Date <span className="req-f">*</span></Form.Label>
-        <Form.Control type="date" placeholder=""  name="EnquiryDate" value={editPnt?.EnquiryDate} onChange={handleChange}/>
+        <Form.Control type="date" placeholder=""  name="EnquiryDate" value={moment((editPnt?.EnquiryDate))?.format("YYYY-MM-DD")} onChange={handleChange}/>
        
       </Form.Group>
                         </Col>
@@ -1462,7 +1524,7 @@ function EditPatients() {
                         <Col md={3}>
                         <Form.Group className="mb-3" controlId="formBasicEmail">
         <Form.Label>Date of birth</Form.Label>
-        <Form.Control type="date" placeholder="" name="DateOfBirth" value={editPnt?.DateOfBirth} onChange={handleChange}/>
+        <Form.Control type="date" placeholder="" name="DateOfBirth" value={moment((editPnt?.DateOfBirth))?.format("YYYY-MM-DD")} onChange={handleChange}/>
        
       </Form.Group>
                         </Col>
@@ -1504,7 +1566,7 @@ function EditPatients() {
                         <Col md={3}>
                         <Form.Group className="mb-3" controlId="formBasicEmail">
         <Form.Label>Country</Form.Label>
-        <Form.Select aria-label="Default select example" name="CountryID" onChange={handleChange}>
+        <Form.Select aria-label="Default select example" name="CountryID" value={editPnt?.CountryID} onChange={handleChange}>
       <option></option>
       {
         countries.currentCountries && countries.currentCountries.map((country)=>{
@@ -1526,7 +1588,7 @@ function EditPatients() {
                         <Form.Group className="mb-3" controlId="formBasicEmail">
         <Form.Label>State</Form.Label>
         <Form.Select aria-label="Default select example" name="StatesID" onChange={handleChange}>
-      <option></option>
+      <option>{selectedState}</option>
       {
         states.currentStates && states.currentStates.map((state)=>{
           return(
@@ -1547,7 +1609,7 @@ function EditPatients() {
                         <Form.Group className="mb-3" controlId="formBasicEmail">
         <Form.Label>City</Form.Label>
         <Form.Select aria-label="Default select example" name="CityID" onChange={handleChange}>
-      <option></option>
+      <option>{selectedCity}</option>
       {
         cities.currentCities && cities.currentCities.map((city)=>{
           return(
@@ -1853,6 +1915,156 @@ enqSource && enqSource.map((enqs)=>{
         <Form.Control as="textarea" rows={2} placeholder="" name="TreatmentExplanation" value={editPnt?.TreatmentExplanation} onChange={handleChange}/>
        
       </Form.Group>
+                          </Col>
+                        </Row>
+
+
+
+
+                        <Row className="mt-3">
+                          <Col>
+        <Form.Label>Physical Generals</Form.Label>
+
+        <Row className="mt-2">
+          <Col md={6}>
+          <Form.Group className="mb-3" controlId="exampleForm.ControlTextarea1">
+        <Form.Label style={{color:"black"}}>Craving:</Form.Label>
+        <Form.Control as="textarea" rows={2} name="Craving" value={editPnt?.Craving} onChange={handleChange}/>
+      </Form.Group>
+          </Col>
+          <Col md={6}>
+          <Form.Group className="mb-3" controlId="exampleForm.ControlTextarea1">
+        <Form.Label style={{color:"black"}}>Aversions:</Form.Label>
+        <Form.Control as="textarea" rows={2} name="Aversions" value={editPnt?.Aversions} onChange={handleChange}/>
+      </Form.Group>
+          </Col>
+        </Row>
+        <Row className="mt-2">
+          <Col md={6}>
+          <Form.Group className="mb-3" controlId="exampleForm.ControlTextarea1">
+        <Form.Label style={{color:"black"}}>Thirst:</Form.Label>
+        <Form.Control as="textarea" rows={2} name="Thirst" value={editPnt?.Thirst} onChange={handleChange}/>
+      </Form.Group>
+          </Col>
+          <Col md={6}>
+          <Form.Group className="mb-3" controlId="exampleForm.ControlTextarea1">
+        <Form.Label style={{color:"black"}}>Perspiration:</Form.Label>
+        <Form.Control as="textarea" rows={2} name="Perspiration" value={editPnt?.Perspiration} onChange={handleChange}/>
+      </Form.Group>
+          </Col>
+        </Row>
+        <Row className="mt-2">
+          <Col md={6}>
+          <Form.Group className="mb-3" controlId="exampleForm.ControlTextarea1">
+        <Form.Label style={{color:"black"}}>Sleep:</Form.Label>
+        <Form.Control as="textarea" rows={2} name="Sleep" value={editPnt?.Sleep} onChange={handleChange}/>
+      </Form.Group>
+          </Col>
+          <Col md={6}>
+          <Form.Group className="mb-3" controlId="exampleForm.ControlTextarea1">
+        <Form.Label style={{color:"black"}}>Dreams:</Form.Label>
+        <Form.Control as="textarea" rows={2} name="Dreams" value={editPnt?.Dreams} onChange={handleChange}/>
+      </Form.Group>
+          </Col>
+        </Row>
+        <Row className="mt-2">
+          <Col md={6}>
+          <Form.Group className="mb-3" controlId="exampleForm.ControlTextarea1">
+        <Form.Label style={{color:"black"}}>Thermals:</Form.Label>
+        <Form.Control as="textarea" rows={2} name="Thermals" value={editPnt?.Thermals} onChange={handleChange}/>
+      </Form.Group>
+          </Col>
+          <Col md={6}>
+          <Form.Group className="mb-3" controlId="exampleForm.ControlTextarea1">
+        <Form.Label style={{color:"black"}}>Bathing:</Form.Label>
+        <Form.Control as="textarea" rows={2} name="Bathing" value={editPnt?.Bathing} onChange={handleChange}/>
+      </Form.Group>
+          </Col>
+        </Row>
+        <Row className="mt-2">
+          <Col md={6}>
+          <Form.Group className="mb-3" controlId="exampleForm.ControlTextarea1">
+        <Form.Label style={{color:"black"}}>Covering:</Form.Label>
+        <Form.Control as="textarea" rows={2} name="Covering" value={editPnt?.Covering} onChange={handleChange}/>
+      </Form.Group>
+          </Col>
+          <Col md={6}>
+          <Form.Group className="mb-3" controlId="exampleForm.ControlTextarea1">
+        <Form.Label style={{color:"black"}}>Seasons:</Form.Label>
+        <Form.Control as="textarea" rows={2} name="Seasons" value={editPnt?.Seasons} onChange={handleChange}/>
+      </Form.Group>
+          </Col>
+        </Row>
+        <Row className="mt-2">
+          <Col md={6}>
+          <Form.Group className="mb-3" controlId="exampleForm.ControlTextarea1">
+        <Form.Label style={{color:"black"}}>Urine and Stool:</Form.Label>
+        <Form.Control as="textarea" rows={2} name="UrineNStool" value={editPnt?.UrineNStool} onChange={handleChange}/>
+      </Form.Group>
+          </Col>
+         
+        </Row>
+        <Row className="mt-2">
+          <Col>
+          <Form.Group className="mb-3" controlId="exampleForm.ControlTextarea1">
+        <Form.Label style={{color:"black"}}>F/H:</Form.Label>
+        <Form.Control as="textarea" rows={3} name="FH" value={editPnt?.FH} onChange={handleChange}/>
+      </Form.Group>
+          </Col>
+         
+        </Row>
+        <Row className="mt-2">
+          <Col>
+          <Form.Group className="mb-3" controlId="exampleForm.ControlTextarea1">
+        <Form.Label style={{color:"black"}}>PERSONAL HISTORY</Form.Label>
+        <Form.Control as="textarea" rows={3} name="PersonalHistory" value={editPnt?.PersonalHistory} onChange={handleChange}/>
+      </Form.Group>
+          </Col>
+         
+        </Row>
+
+
+                       <Row className="mt-2">
+          <Col md={6}>
+          <Form.Group className="mb-3" controlId="exampleForm.ControlTextarea1">
+        <Form.Label style={{color:"black"}}>Mentals:</Form.Label>
+        <Form.Control as="textarea" rows={4} name="Mentals" value={editPnt?.Mentals} onChange={handleChange}/>
+      </Form.Group>
+          </Col>
+          <Col md={6}>
+          <Form.Group className="mb-3" controlId="exampleForm.ControlTextarea1">
+        <Form.Label style={{color:"black"}}>Lifespace & Reactivity:</Form.Label>
+        <Form.Control as="textarea" rows={4} name="LifespaceReactivity" value={editPnt?.LifespaceReactivity} onChange={handleChange}/>
+      </Form.Group>
+          </Col>
+        </Row>    
+                       <Row className="mt-2">
+          <Col md={6}>
+          <Form.Group className="mb-3" controlId="exampleForm.ControlTextarea1">
+        <Form.Label style={{color:"black"}}>Menses:</Form.Label>
+        <Form.Control as="textarea" rows={4} name="MensesTotality" value={editPnt?.MensesTotality} onChange={handleChange}/>
+      </Form.Group>
+          </Col>
+          <Col md={6}>
+          <Form.Group className="mb-3" controlId="exampleForm.ControlTextarea1">
+        <Form.Label style={{color:"black"}}>Totality:</Form.Label>
+        <Form.Control as="textarea" rows={4} name="Totality" value={editPnt?.Totality} onChange={handleChange}/>
+      </Form.Group>
+          </Col>
+        </Row>    
+
+
+        <Row className="mt-2">
+          <Col>
+          <Form.Group className="mb-3" controlId="exampleForm.ControlTextarea1">
+        <Form.Label style={{color:"black"}}>Medicine:</Form.Label>
+        <Form.Control as="textarea" rows={4} name="Medicine" value={editPnt?.Medicine} onChange={handleChange}/>
+      </Form.Group>
+          </Col>
+         
+        </Row>
+
+        
                           </Col>
                         </Row>
 

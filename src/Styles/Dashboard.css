@@ -45,7 +45,7 @@
     font-size: 32px;
     font-weight: 500;
     color: #00AE3B;
-
+white-space: nowrap;
 
 }
 .countL4{
@@ -59,4 +59,9 @@
 .userGreet{
     font-size: 20px;
     font-weight: 500;
+}
+
+.graphHead{
+    font-size: 18px;
+    font-weight: 600;
 }

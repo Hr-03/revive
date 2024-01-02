@@ -1,5 +1,5 @@
-import React,{useState,useEffect,useMemo} from 'react';
-import "../Styles/InvoiceView.css";
+import React,{useEffect,useState,useMemo} from 'react';
+import "../Styles/Dashboard.css";
 import { styled, useTheme,alpha } from '@mui/material/styles';
 import Box from '@mui/material/Box';
 import Drawer from '@mui/material/Drawer';
@@ -22,7 +22,7 @@ import MailIcon from '@mui/icons-material/Mail';
 import CloseIcon from '@mui/icons-material/Close';
 import "../Components/Sidebar.css";
 import logo from "../Assets/logo.png";
-import { HelpOutlineOutlined, NotificationsNoneOutlined } from "@mui/icons-material";
+import { HelpOutlineOutlined, NotificationsNoneOutlined, SettingsPhone } from "@mui/icons-material";
 import Button from '@mui/material/Button';
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
@@ -33,7 +33,7 @@ import FileCopyIcon from '@mui/icons-material/FileCopy';
 import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import { Avatar,Tooltip } from "@mui/material";
-import { Card, Col, Row ,Modal,Form, Table} from "react-bootstrap";
+import { Card, Col, Row ,Modal,Form} from "react-bootstrap";
 import MaterialReactTable from "material-react-table";
 // import "../../index.css";
 import { Delete, Edit } from "@mui/icons-material";
@@ -58,15 +58,25 @@ import lp from "../Assets/lp.png";
 import report from "../Assets/reports.png";
 import calendarap from "../Assets/calendar.png";
 
+import {CgArrowLongRight} from "react-icons/cg";
+import tl from "../Assets/totalLeads.png";
+import cl from "../Assets/convertedLeads.png";
+import ul from "../Assets/unconvertedLeads.png";
+import hl from "../Assets/hotLeads.png";
+import drs from "../Assets/doctors.svg";
+import emps from "../Assets/employees.svg";
+import branches from "../Assets/branch.svg";
 import { MdLogout } from 'react-icons/md';
-import { BsDot, BsPlus } from 'react-icons/bs';
-import { ReactSearchAutocomplete } from 'react-search-autocomplete';
-import invoice from "../Assets/invoice.png";
-import Swal from 'sweetalert2';
 import addTmnt from "../Assets/addtmt.png";
 import addColl from "../Assets/addcoln.png";
-import logonew from "../Assets/logonew.svg"
-import ReactToPrint from "react-to-print";
+
+import tapmt from "../Assets/tdyapmt.svg";
+import fups from "../Assets/flups.svg";
+
+import invoice from "../Assets/invoice.png";
+import { PieChart, pieArcLabelClasses } from '@mui/x-charts/PieChart';
+import { useDrawingArea } from '@mui/x-charts/hooks';
+import { styled as sty } from '@mui/material/styles';
 
 const drawerWidth = 240;
 
@@ -156,92 +166,293 @@ const StyledMenu = styled((props) => (
       },
     },
   }));
+  
 
-function ConsultationInvoiceView() {
+  const StyledText = sty('text')(({ theme }) => ({
+    fill: theme.palette.text.primary,
+    textAnchor: 'middle',
+    dominantBaseline: 'central',
+    fontSize: 20,
+  }));
+
+
+  function PieCenterLabel({ children }) {
+    const { width, height, left, top } = useDrawingArea();
+    return (
+      <StyledText x={left + width / 2} y={top + height / 2} style={{fontSize:"32px",fontWeight:"500"}}>
+        {children}
+      </StyledText>
+    );
+  }
+
+
+
+function Dashboard2() {
+
    
+  const [datedata, setdatedata] = useState({
+    startDate:"",
+    endDate:""
+  })
+
+
+  const handleDates=(e)=>{
+    const newdata={...datedata};
+    newdata[e.target.name]=e.target.value;
+    setdatedata(newdata);
+    console.log(newdata);
+  }
+
+    const [greet, setgreet] = useState("")
+
+    useEffect(()=>{
+      var today = new Date()
+      var curHr = today.getHours()
+      if (curHr < 12) {
+        setgreet('Good morning')
+       } else if (curHr < 18) {
+        setgreet('Good afternoon')
+       } else {
+        setgreet('Good evening')
+       }
+    },[])
+    
+  
+    
+  
     const navigate=useNavigate();
-    const [createModalOpen, setCreateModalOpen] = useState(false);
-
-    const theme = useTheme();
-    const [open, setOpen] = React.useState(false);
+      const [createModalOpen, setCreateModalOpen] = useState(false);
   
-    const handleDrawerOpen = () => {
-      setOpen(true);
-    };
+      const theme = useTheme();
+      const [open, setOpen] = React.useState(false);
+    
+      const handleDrawerOpen = () => {
+        setOpen(true);
+      };
+    
+      const handleDrawerClose = () => {
+        setOpen(false);
+      };
+      const [anchorEl, setAnchorEl] = React.useState(null);
+      const op = Boolean(anchorEl);
+      const handleClick = (event) => {
+        setAnchorEl(event.currentTarget);
+      };
+      const handleClose = () => {
+        setAnchorEl(null);
+      };
   
-    const handleDrawerClose = () => {
-      setOpen(false);
-    };
-    const [anchorEl, setAnchorEl] = React.useState(null);
-    const op = Boolean(anchorEl);
-    const handleClick = (event) => {
-      setAnchorEl(event.currentTarget);
-    };
-    const handleClose = () => {
-      setAnchorEl(null);
-    };
-
-
-
-    let Role=sessionStorage.getItem("RoleId");
-
-    let User=Role==="1"?0:sessionStorage.getItem("UserId")
-
-
-    const [parentMenu, setparentMenu] = useState([]);
-
-    const [mainMenu, setmainMenu] = useState([]);
   
-    const [clinicSetting, setclinicSetting] = useState([]);
   
-    const [treatmentMenu, settreatmentMenu] = useState([]);
+      const columns = useMemo(
+          () => [
+          //   {
+          //     accessorKey: "srNo",
+          //     header: "Sr No.",
+          //     muiTableHeadCellFilterTextFieldProps: { placeholder: "Sr.No." },
+              
+          //   },
+            {
+              accessorKey: "Name",
+              header: "Name",
+            },
+            {
+              accessorKey: "EnquiryFor",
+              header: "Enquiry For",
+            },
+            {
+              accessorKey: "EnquiryType",
+              header: "Enquiry Type",
+            },
+            {
+              accessorKey: "EnquiryDate",
+              header: "Enquiry Date",
+              Cell:({cell})=>{
+                  let ed=cell.getValue()
+                  return(
+                      <>
+                      <div>{ed.split(" ")[0]}</div>
+                      </>
+                  )
+              }
+            },
+            {
+              accessorKey: "MobileNo",
+              header: "Mobile No.",
+            },
+            {
+              accessorKey: "SourceType",
+              header: "Source",
+            },
+            {
+              accessorKey: "FollowUpDate",
+              header: "FollowUp Date",
+              Cell:({cell})=>{
+                  let fd=cell.getValue()
+                  return(
+                      <>
+                      <div>{fd.split(" ")[0]}</div>
+                      </>
+                  )
+              }
+            },
+          //   {
+          //     accessorKey: "download",
+          //     header: "Download",
+          //     Cell:({cell})=>{
+          //         let a=cell.getValue();
+          //         return(
+          //         a==="unChecked"?<img src="https://png.pngtree.com/png-vector/20191017/ourlarge/pngtree-cross-icon-flat-style-png-image_1811243.jpg" alt="" srcset="" width={50}/>:<img src="https://cms-assets.tutsplus.com/cdn-cgi/image/width=850/uploads/users/523/posts/32694/final_image/tutorial-preview-large.png" width={50}/>
+          //       )          }
+          //   },
+          //   {
+          //     accessorKey: "address",
+          //     header: "Address",
+          //   },
+          //   {
+          //     accessorKey: "location",
+          //     header: "Location",
+          //   },
+          //   {
+          //     accessorKey: "phoneNo",
+          //     header: "Phone No.",
+          //   },
+          //   {
+          //     accessorKey: "responsiblePerson",
+          //     header: "Responsible Person",
+          //   },
+            // {
+            //   accessorKey: 'gender',
+            //   header: 'Gender',
+            //   filterFn: 'equals',
+            //   filterSelectOptions: [
+            //     { text: 'Male', value: 'Male' },
+            //     { text: 'Female', value: 'Female' },
+            //     { text: 'Other', value: 'Other' },
+            //   ],
+            //   filterVariant: 'select',
+            // },
+            // {
+            //   accessorKey: 'age',
+            //   header: 'Age',
+            //   filterVariant: 'range',
+            // },
+            // {
+            //   accessorKey: 'actions',
+            //   header: 'Actions',
+      
+            // },
+          ],
+          []
+        );
+      
+        // const [data,setData] = useState([
+         
+        //     {
+        //       srNo: 1,
+        //       role: "Admin",
+        //       menu:"Clinic Settings",
+        //       add:<img src="https://cms-assets.tutsplus.com/cdn-cgi/image/width=850/uploads/users/523/posts/32694/final_image/tutorial-preview-large.png" width={50}/>,
+        //       edit:<img src="https://cms-assets.tutsplus.com/cdn-cgi/image/width=850/uploads/users/523/posts/32694/final_image/tutorial-preview-large.png" width={50}/>,
+        //       delete:<img src="https://cms-assets.tutsplus.com/cdn-cgi/image/width=850/uploads/users/523/posts/32694/final_image/tutorial-preview-large.png" width={50}/>,
+        //       view:<img src="https://cms-assets.tutsplus.com/cdn-cgi/image/width=850/uploads/users/523/posts/32694/final_image/tutorial-preview-large.png" width={50}/>,
+        //       download:<img src="https://cms-assets.tutsplus.com/cdn-cgi/image/width=850/uploads/users/523/posts/32694/final_image/tutorial-preview-large.png" width={50}/>
+             
+        //     },
+        //     {
+        //       srNo: 2,
+        //       role: "Doctor",
+        //       menu:"User Settings",
+        //       add:<img src="https://cms-assets.tutsplus.com/cdn-cgi/image/width=850/uploads/users/523/posts/32694/final_image/tutorial-preview-large.png" width={50}/>,
+        //       edit:<img src="https://cms-assets.tutsplus.com/cdn-cgi/image/width=850/uploads/users/523/posts/32694/final_image/tutorial-preview-large.png" width={50}/>,
+        //       delete:<img src="https://cms-assets.tutsplus.com/cdn-cgi/image/width=850/uploads/users/523/posts/32694/final_image/tutorial-preview-large.png" width={50}/>,
+        //       view:<img src="https://flyclipart.com/thumb2/x-button-327024.png" width={50}/>,
+        //       download:"unChecked"
+              
+        //     },
+           
+        //   ],
+        //   []
+        // );
   
-    const [userSetting, setuserSetting] = useState([]);
   
-    const [lpMenu, setlpMenu] = useState([]);
   
-    const [apmntMenu, setapmntMenu] = useState([]);
+        const [todaysFollowup, setTodaysFollowup] = useState([]);
   
-    const [reportMenu, setreportMenu] = useState([]);
   
-    const [menuList, setMenuList] = useState([]);
+        let Role=sessionStorage.getItem("RoleId");
   
-    //  let Role=sessionStorage.getItem("RoleId");
+        let User=Role==="1"?0:sessionStorage.getItem("UserId")
+  
+  
+        const tfUrl=`https://reviveapplication.com/ReviveAPI/Revive.svc/GetTodaysFollowupList/${User}`
+  
+  
+        useEffect(()=>{
+          fetch(tfUrl)
+          .then((res)=>res.json())
+          .then((tf)=>{
+              console.log(tf.Data);
+              setTodaysFollowup(tf.Data);
+          })
+        },[])
+  
+  
+  
+  
+        const [parentMenu, setparentMenu] = useState([]);
+  
+        const [mainMenu, setmainMenu] = useState([]);
+      
+        const [clinicSetting, setclinicSetting] = useState([]);
+      
+        const [treatmentMenu, settreatmentMenu] = useState([]);
+      
+        const [userSetting, setuserSetting] = useState([]);
+      
+        const [lpMenu, setlpMenu] = useState([]);
+      
+        const [apmntMenu, setapmntMenu] = useState([]);
+      
+        const [reportMenu, setreportMenu] = useState([]);
+      
+        const [menuList, setMenuList] = useState([]);
+      
+        //  let Role=sessionStorage.getItem("RoleId");
     const menuUrl = `https://reviveapplication.com/ReviveAPI/Revive.svc/GetMenuAccess/${Role}`;
-    useEffect(() => {
-      fetch(menuUrl)
-        .then((res) => res.json())
-        .then((list) => {
-          console.log(list.Data);
-          setMenuList(list.Data);
-  
-          setparentMenu(list.Data.filter((parent, i) => parent?.Parent === 0));
-          // console.log(list.Data.filter((parent,i)=>parent.Parent===0));
-  
-          setmainMenu(list.Data.filter((main, i) => main.Parent === 3));
-          // console.log(list.Data.filter((main,i)=>main.Parent===3));
-  
-          setlpMenu(list.Data.filter((lp, i) => lp.Parent === 6));
-          // console.log(list.Data.filter((lp,i)=>lp.Parent===6));
-  
-          setreportMenu(list.Data.filter((rpt, i) => rpt.Parent === 8));
-          // console.log(list.Data.filter((rpt,i)=>rpt.Parent===8));
-  
-          setclinicSetting(list.Data.filter((cs, i) => cs.Parent === 4));
-          // console.log(list.Data.filter((cs,i)=>cs.Parent===4);
-  
-          setuserSetting(list.Data.filter((user, i) => user.Parent === 5));
-          // console.log(list.Data.filter(((user,i)=>user.Parent===5)));
-  
-          settreatmentMenu(list.Data.filter((treat, i) => treat.Parent === 9));
-          // console.log(list.Data.filter((treat,i)=>treat.Parent===9));
-  
-          setapmntMenu(list.Data.filter((apmnt, i) => apmnt.Parent === 7));
-          // console.log(list.Data.filter((apmnt,i)=>apmnt.Parent===7));
-        });
-    }, []);
-  
-  
+        useEffect(() => {
+          fetch(menuUrl)
+            .then((res) => res.json())
+            .then((list) => {
+              console.log(list.Data);
+              setMenuList(list.Data);
+      
+              setparentMenu(list.Data.filter((parent, i) => parent.Parent === 0));
+              // console.log(list.Data.filter((parent,i)=>parent.Parent===0));
+      
+              setmainMenu(list.Data.filter((main, i) => main.Parent === 3));
+              // console.log(list.Data.filter((main,i)=>main.Parent===3));
+      
+              setlpMenu(list.Data.filter((lp, i) => lp.Parent === 6));
+              // console.log(list.Data.filter((lp,i)=>lp.Parent===6));
+      
+              setreportMenu(list.Data.filter((rpt, i) => rpt.Parent === 8));
+              // console.log(list.Data.filter((rpt,i)=>rpt.Parent===8));
+      
+              setclinicSetting(list.Data.filter((cs, i) => cs.Parent === 4));
+              // console.log(list.Data.filter((cs,i)=>cs.Parent===4);
+      
+              setuserSetting(list.Data.filter((user, i) => user.Parent === 5));
+              // console.log(list.Data.filter(((user,i)=>user.Parent===5)));
+      
+              settreatmentMenu(list.Data.filter((treat, i) => treat.Parent === 9));
+              // console.log(list.Data.filter((treat,i)=>treat.Parent===9));
+      
+              setapmntMenu(list.Data.filter((apmnt, i) => apmnt.Parent === 7));
+              // console.log(list.Data.filter((apmnt,i)=>apmnt.Parent===7));
+            });
+        }, []);
+      
   
     const [open1, setOpen1] = React.useState(false);
   
@@ -279,95 +490,173 @@ function ConsultationInvoiceView() {
     const handleReportClick = () => {
       setOpen7(!open7);
     };
-
-let enqID=sessionStorage.getItem("consultEnqId");
-
-let invNo=sessionStorage.getItem("consultInvNo");
-
-
-    const invURl=`https://reviveapplication.com/ReviveAPI/Revive.svc/GetConsultationInvoiceBill/${invNo}/${enqID}`;
-
-const [invoiceDetails, setinvoiceDetails] = useState([]);
-
-const [paymentModes, setpaymentModes] = useState([])
-
-
-useEffect(()=>{
-fetch(invURl)
-.then((res)=>res.json())
-.then((result)=>{
-  console.log(result.Data[0]);
-  setinvoiceDetails(result.Data[0]);
-  setpaymentModes(result.Data[0]?.PaymentModeTs[0])
-})
-},[])
-
-
-
-
-
-
-
-const componentRef = React.useRef(null);
-
-const onBeforeGetContentResolve = React.useRef(null);
-
-const [loading, setLoading] = React.useState(false);
-const [text, setText] = React.useState("old boring text");
-
-const handleAfterPrint = React.useCallback(() => {
-  console.log("`onAfterPrint` called");
-}, []);
-
-const handleBeforePrint = React.useCallback(() => {
-  console.log("`onBeforePrint` called");
-}, []);
-
-const handleOnBeforeGetContent = React.useCallback(() => {
-  console.log("`onBeforeGetContent` called");
-  setLoading(true);
-  setText("Loading new text...");
-
-  return new Promise((resolve) => {
-    onBeforeGetContentResolve.current = resolve;
-
-    setTimeout(() => {
-      setLoading(false);
-      setText("New, Updated Text!");
-      resolve();
-    }, 2000);
-  });
-}, [setLoading, setText]);
-
-React.useEffect(() => {
-  if (
-    text === "New, Updated Text!" &&
-    typeof onBeforeGetContentResolve.current === "function"
-  ) {
-    onBeforeGetContentResolve.current();
-  }
-}, [onBeforeGetContentResolve.current, text]);
-
-const reactToPrintContent = React.useCallback(() => {
-  return componentRef.current;
-}, [componentRef.current]);
-
-const reactToPrintTrigger = React.useCallback(() => {
-  // NOTE: could just as easily return <SomeComponent />. Do NOT pass an `onClick` prop
-  // to the root node of the returned component as it will be overwritten.
-
-  // Bad: the `onClick` here will be overwritten by `react-to-print`
-  // return <button onClick={() => alert('This will not work')}>Print this out!</button>;
-
-  // Good
-  return <Button variant='' className='prntBtn mt-2'>Print</Button>;
-}, []);
-
-
-
+  
+  
+  
+    const [stats, setstats] = useState([]);
+  
+  
+    const [tapmnt, settapmnt] = useState([])
+  
+    const [tfups, settfups] = useState([])
+    
+  const [data, setdata] = useState([]);
+  
+  
+  const [pnt, setpnt] = useState([]);
+  
+  
+  const [clnc, setclnc] = useState([]);
+  
+  
+  
+    const statUrl=`https://reviveapplication.com/ReviveAPI/Revive.svc/GetDashboard/${User}/0/0`;
+  
+    useEffect(()=>{
+      fetch(statUrl)
+      .then((res)=>res.json())
+      .then((result)=>{
+        console.log(result);
+        setstats(result)
+  
+  setdata(result.DLeadsSourceDatas)
+  
+  setpnt(result.DTreatmentCategoryDatas)
+  
+  setclnc(result.DClinicDatas)
+        settapmnt(result?.ActivityAppointments);
+        settfups(result?.ActivityFollowups);
+  
+  
+      })
+    },[])
+  
+  
+  
+  
+  
+  
+    const columns1 = useMemo(
+      () => [
+        // {
+        //   accessorKey: "UserID",
+        //   header: "User ID",
+        //   muiTableHeadCellFilterTextFieldProps: { placeholder: "User ID" },
+          
+        // },
+        {
+          accessorKey: "ClinicName",
+          header: "Clinic Name",
+          // Cell:({cell})=>{
+          //   let imurl=cell.getValue();
+  
+          //   return <div>{<img src={imurl?imurl:"https://swargworld.com/wp-content/uploads/2017/01/No_image_available.jpg"} width={150} height={150}/>}</div>
+          // }
+        },
+        {
+          accessorKey: "Name",
+          header: "Name",
+        },
+      
+  
+        {
+          accessorKey: "Date",
+          header: "Date",
+          Cell:({cell})=>{
+            let date=cell.getValue();
+          //   console.log(date.split("T")[0]);
+            return <div>{date?.split(" ")[0]}</div>
+          },
+          filterFn: (row, id, filterValue) =>
+      row.getValue(id).startsWith(filterValue),
+        },
+        {
+          accessorKey: "Time",
+          header: "Time",
+          // Cell:({cell})=>{
+          //   let date=cell.getValue();
+          // //   console.log(date.split("T")[0]);
+          //   return <div>{date?.split("T")[0]}</div>
+          // },
+          filterFn: (row, id, filterValue) =>
+      row.getValue(id).startsWith(filterValue),
+        },
+     
+       
+       
+    
+      ],
+      []
+    );
+  
+  
+  
+  
+    const columns3 = useMemo(
+      () => [
+        // {
+        //   accessorKey: "UserID",
+        //   header: "User ID",
+        //   muiTableHeadCellFilterTextFieldProps: { placeholder: "User ID" },
+          
+        // },
+        {
+          accessorKey: "ClinicName",
+          header: "Clinic Name",
+          // Cell:({cell})=>{
+          //   let imurl=cell.getValue();
+  
+          //   return <div>{<img src={imurl?imurl:"https://swargworld.com/wp-content/uploads/2017/01/No_image_available.jpg"} width={150} height={150}/>}</div>
+          // }
+        },
+        {
+          accessorKey: "Name",
+          header: "Name",
+        },
+  
+       
+  
+        {
+          accessorKey: "Date",
+          header: "Date",
+          Cell:({cell})=>{
+            let date=cell.getValue();
+            return <div>{date.split(" ")[0]}</div>
+          },
+          filterFn: (row, id, filterValue) =>
+      row.getValue(id).startsWith(filterValue),
+        },
+  
+       
+    
+      ],
+      []
+    );
+  
+    
+    const size = {
+      width: 400,
+      height: 250,
+    };
+    const size1 = {
+      width: 300,
+      height: 250,
+    };
+  
+    const palette = ['#FF772A', '#6268FC', '#FF00E5','#FC4040','#FFB800'];
+    const palette1 = ['#4048FC', '#00AE3B', '#FF759D'];
+    const palette2 = ['#FF9B05', '#FA1BFF', '#6827F3','#00AE3B'];
+    
+  
+  
+  
+    let clncCount=clnc.reduce((accumulator, item) => accumulator + parseInt(item.value), 0);
+  
+    let pntCount=pnt.reduce((accumulator, item) => accumulator + parseInt(item.value), 0);
+  
   return (
     <>
-      <Box sx={{ display: 'flex' }}>
+       <Box sx={{ display: 'flex' }}>
       <CssBaseline />
       <AppBar position="fixed" open={open} className="navigBar">
           <Toolbar>
@@ -891,230 +1180,548 @@ const reactToPrintTrigger = React.useCallback(() => {
         </Drawer>
       <Main open={open}>
         <DrawerHeader />
-        <ReactToPrint
-        content={reactToPrintContent}
-        documentTitle="AwesomeFileName"
-        onAfterPrint={handleAfterPrint}
-        onBeforeGetContent={handleOnBeforeGetContent}
-        onBeforePrint={handleBeforePrint}
-        removeAfterPrint
-        trigger={reactToPrintTrigger}
-      />
-      {loading && <p className="indicator">Loading...</p>}
-      {/* <ComponentToPrint ref={componentRef} text={text} /> */}
+      <Row className="mt-3">
+        <Col>
+        <div className='d-flex justify-content-between'>
+          <p className="userGreet">{greet}</p>
 
-      <div ref={componentRef} text={text}>
-       <Card className="m-1 mt-3 ap-crd">
-       <Card.Header className='crdH p-5 pt-3 pb-3'>
-        <Row>
-            <Col className='d-flex'>
-            <img src={logonew} alt="" srcset="" className='inv-logo'/>
-            <div className='d-block mt-5 p-1'>
-                <p className='p-0 m-1'><b>Branch:</b> <span>{invoiceDetails?.Branch}</span></p> 
-                <p className='p-0 m-1'><b>Address:</b> <span>{invoiceDetails?.Address}</span></p>
-                <p className='p-0 m-1'>{invoiceDetails?.MobileNo}</p>
-                <p className='p-0 m-1'>{invoiceDetails?.Email}</p>
-            </div>
-            </Col>
-            <Col className='p-5'>
-            <div className='invViewDate'>
-                <p className=''><b>Date:</b> <span>{invoiceDetails?.InvoiceDate?.split(" ")[0]}</span></p>
-                <p className=''><b>Invoice No:</b> <span>{invoiceDetails?.InvoiceCode}</span></p>
-            </div>
-            </Col>
+          <div>
+          <Row className="mt-4">
+          <Col>
+          <div className='d-flex flex-wrap'>
+          <Form.Group className="mb-3" controlId="formBasicEmail">
+        <Form.Label>From date</Form.Label>
+        <Form.Control type="date" name="startDate" value={datedata?.startDate} placeholder="" onChange={handleDates} />
+      
+      </Form.Group>
+      <Form.Group className="mb-3 mx-3" controlId="formBasicEmail">
+        <Form.Label>To date</Form.Label>
+        <Form.Control type="date" name="endDate" value={datedata?.endDate} placeholder="" onChange={handleDates}/>
+      
+      </Form.Group>
+<div className='pt-3'>
+
+      <Button variant='' className='mx-3 rptBtn mt-4' onClick={(e)=>{
+        e.preventDefault();
+
+        const datefiltered=`https://reviveapplication.com/ReviveAPI/Revive.svc/GetDashboard/${User}/${datedata?.startDate}/${datedata?.endDate}`
+        fetch(datefiltered)
+        .then((res)=>res.json())
+        .then((geteRes)=>{
+          console.log(geteRes);
+          setstats(geteRes)
+
+
+          
+setdata(geteRes.DLeadsSourceDatas)
+
+setpnt(geteRes.DTreatmentCategoryDatas)
+
+setclnc(geteRes.DClinicDatas)
+
+
+        })
+
+      }}>Search</Button>
+</div>
+          </div>
+          </Col>
         </Row>
-       </Card.Header>
-       <Card.Body className='p-5'>
-          <Row>
-            <Col>
-            <p className='text-center invT'><u>INVOICE</u></p>
+          </div>
+        </div>
 
-         <Card>
-            <Row>
-                <Col>
-                <div className='p-3'>
-                    <p>Billed to,</p>
-                    <p><b>{invoiceDetails?.LeadName}</b></p>
-                    <p>{invoiceDetails?.Gender}, {invoiceDetails?.Age}</p>
-                    <p>Patient No.: 01552 </p>
-                </div>
+
+        <Row>
+          <Col>
+          <Card>
+            <p className="p-3 lCount">Lead Count</p>
+            <Row className="m-3 mt-0">
+              <Col md={3} style={{borderRight:"1px solid black"}}>
+              <Row>
+                <Col md={6}>
+                <p className='mx-3 mb-0 lTitle1'>Total Leads</p>
+                <Button variant="" onClick={()=>{
+                  navigate("/enquiries")
+                }}>view all <span className="mx-2"><CgArrowLongRight/></span></Button>
                 </Col>
+
+                <Col md={6} className="mt-3">
+                <p className="mx-4 countL1">{stats?.TotalLeads}</p>
+                {/* <img src={tl} alt="" srcset="" /> */}
+                </Col>
+              </Row>
+              </Col>
+              <Col md={3} style={{borderRight:"1px solid black"}}>
+              <Row>
+                <Col md={6}>
+                <p className='mx-3 mb-0 lTitle2'>Total patients</p>
+                <Button variant="" onClick={()=>{
+                  navigate("/patients")
+                }}>view all <span className="mx-2"><CgArrowLongRight/></span></Button>
+                </Col>
+
+                <Col md={6} className="mt-3">
+                <p className="mx-4 px-2 countL2">{stats?.ConvertedLeads}</p>
+                {/* <img src={cl} alt="" srcset="" /> */}
+                </Col>
+              </Row>
+              </Col>
+               <Col md={3} style={{borderRight:"1px solid black"}}>
+              <Row>
+                <Col md={6}>
+                <p className='mx-3 mb-0 lTitle3'>Unconverted Leads</p>
+                <Button variant="" onClick={()=>{
+                  navigate("/fup-entries")
+                }}>view all <span className="mx-2"><CgArrowLongRight/></span></Button>
+                </Col>
+
+                <Col md={6} className="mt-3">
+                <p className="mx-5 px-4 countL3">{stats?.UnconvertedLeads}</p>
+                {/* <img src={ul} alt="" srcset="" /> */}
+                </Col>
+              </Row>
+              </Col> 
+              <Col md={3}>
+              <Row>
+                <Col md={6}>
+                <p className='mx-3 mb-0 lTitle4'>Hot Leads</p>
+                {/* <Button variant="" onClick={()=>{
+                  // navigate("/")
+                }}>view all <span className="mx-2"><CgArrowLongRight/></span></Button> */}
+                </Col>
+
+                <Col md={6} className="mt-3">
+                <p className="mx-4 px-3 countL4">{stats?.HotLeads}</p>
+                {/* <img src={hl} alt="" srcset="" /> */}
+                </Col>
+              </Row>
+              </Col>
+            </Row>
+          </Card>
+          </Col>
+        </Row>
+
+
+        <Row className="mt-4">
+          <Col>
+<p style={{fontSize:"22px",fontWeight:"500"}}>Reports</p>
+          <Row>
+            <Col md={3}>
+            <Card className="p-3 me-0 me-md-5">
+              <Row>
                 <Col>
-                <div className='m-5'>
-                    <p>{invoiceDetails?.PatientAddress}</p>
+
+                  {/* <Row>
+                    <Col md={4}>
                     
-                    <p>{invoiceDetails?.PatientMobile}</p>
-                </div>
+                <Card style={{borderColor:"#FF7A00"}}>
+                  <img src={drs} alt="" srcset="" width={50} height={50} className="m-auto mt-2 mb-2"/>
+                </Card>
+                    </Col>
+                    <Col md={8}>
+                    <p className='mx-3' style={{fontSize:"32px",color:"#FF7A00",fontWeight:"500"}}>{stats?.TotalDoctors}</p>
+                    </Col>
+                  </Row> */}
+                <p style={{fontWeight:"500",color:"#FF7A00",fontSize:"16px"}} className='m-0 pt-1 pb-1'>Activity Report</p>
+                <Button variant="" className='p-0' onClick={()=>{
+                  navigate("/activity-rpt")
+                }}>view  <span className="mx-2"><CgArrowLongRight/></span></Button>
+                
                 </Col>
-            </Row>
-         </Card>
+                
+              </Row>
+            </Card>
+            </Col>
+            <Col md={3}>
+            <Card className="p-3 me-0 me-md-5">
+              <Row>
+                <Col>
+
+                  {/* <Row>
+                    <Col md={4}>
+                    
+                <Card style={{borderColor:"#FFB800"}}>
+                  <img src={emps} alt="" srcset="" width={50} height={50} className="m-auto mt-2 mb-2"/>
+                </Card>
+                    </Col>
+                    <Col md={8}>
+                    <p className='mx-3' style={{fontSize:"32px",color:"#FFB800",fontWeight:"500"}}>{stats?.TotalEmployees}</p>
+                    </Col>
+                  </Row> */}
+                <p style={{fontWeight:"500",color:"#FFB800",fontSize:"16px"}} className='m-0 pt-1 pb-1'>Collection Report</p>
+                <Button variant="" className='p-0' onClick={()=>{
+                  navigate("/clln-rpt")
+                }}>view  <span className="mx-2"><CgArrowLongRight/></span></Button>
+                
+                </Col>
+                
+              </Row>
+            </Card>
+            </Col>
+            <Col md={3}>
+            <Card className="p-3 me-0 me-md-5">
+              <Row>
+                <Col>
+
+                  {/* <Row>
+                    <Col md={4}>
+                    
+                <Card style={{borderColor:"#00AE3B"}}>
+                  <img src={branches} alt="" srcset="" width={50} height={50} className="m-auto mt-2 mb-2"/>
+                </Card>
+                    </Col>
+                    <Col md={8}>
+                    <p className='mx-3' style={{fontSize:"32px",color:"#00AE3B",fontWeight:"500"}}>{stats?.TotalBranch}</p>
+                    </Col>
+                  </Row> */}
+                <p style={{fontWeight:"500",color:"#00AE3B",fontSize:"16px"}} className='m-0 pt-1 pb-1'>Invoice Report</p>
+                <Button variant="" className='p-0' onClick={()=>{
+                  navigate("/inv-rpt")
+                }}>view  <span className="mx-2"><CgArrowLongRight/></span></Button>
+                
+                </Col>
+                
+              </Row>
+            </Card>
+            </Col>
+            <Col md={3}>
+            <Card className="p-3 me-0 me-md-5">
+              <Row>
+                <Col>
+
+                  {/* <Row>
+                    <Col md={4}>
+                    
+                <Card style={{borderColor:"#00AE3B"}}>
+                  <img src={branches} alt="" srcset="" width={50} height={50} className="m-auto mt-2 mb-2"/>
+                </Card>
+                    </Col>
+                    <Col md={8}>
+                    <p className='mx-3' style={{fontSize:"32px",color:"#00AE3B",fontWeight:"500"}}>{stats?.TotalBranch}</p>
+                    </Col>
+                  </Row> */}
+                <p style={{fontWeight:"500",color:"#946DB7",fontSize:"16px"}} className='m-0 pt-1 pb-1'>Consultation Report</p>
+                <Button variant="" className='p-0' onClick={()=>{
+                  navigate("/consult-rpt")
+                }}>view  <span className="mx-2"><CgArrowLongRight/></span></Button>
+                
+                </Col>
+                
+              </Row>
+            </Card>
+            </Col>
+          </Row>
+          </Col>
+      
+        </Row>
 
 
-         <p className='mt-5 mb-0'><b>By Dr. {invoiceDetails?.DoctorName}</b></p>
-         
 
-         <Table responsive>
-          <thead className='invTH'>
-            <tr>
-                <th className='invth'>Sr no.</th>
-                <th className='invth'>Treatment</th>
-                {/* <th className='invth'>Cost</th>
-                <th className='invth'>Discount</th>
-                <th className='invth'>Tax</th> */}
-                <th className='invth'>Total Cost</th>
-            </tr>
-          </thead>
 
-          <tbody className='invTB'>
-            {
-              invoiceDetails?.TreatmentTs?.map((t,i)=>{
-                return(
-                  <>
-                   <tr>
-                <td className='invtd'>{i+1}</td>
-                <td className='invtd'>{t?.Treatment}</td>
-                {/* <td className='invtd'>{t?.Cost}</td>
-                <td className='invtd'>{t?.Discount}</td>
-                <td className='invtd'>{t?.Tax}</td> */}
-                <td className='invtd'>{t?.TotalCost}</td>
-            </tr>
-                  </>
-                )
-              })
-            }
-           
+        <Row className='mt-4'>
+          <Col className=''>
+            <Card className='p-3'>
+              <div className="d-flex">
+              
+                        <Card style={{borderColor:"#825AA5"}} className='p-2'>
+              <img src={tapmt} alt="" srcset="" className='m-auto' width={50} height={50}/>
+                        </Card>
+                        <div className=' mt-2 mx-2'>
+              <p style={{fontSize:"18px",fontWeight:"600"}} className='m-0'>Today’s Appointment</p>
+              <p style={{fontSize:"24px",fontWeight:"500",color:"#825AA5"}} className='m-0'>{stats?.TodaysAppointment}</p>
+                        </div>
+              </div>
+
+              <div className='mt-2'>
+                <MaterialReactTable
+                    columns={columns1}
+                    data={tapmnt}
+                    initialState={{ showColumnFilters: true }} //show filters by default
+                
+                    muiTableHeadCellFilterTextFieldProps={{
+                      sx: { m: "0.5rem 0", width: "100%" },
+                      variant: "outlined",
+                    }}
+                    // enableEditing
+                    // onEditingRowSave={handleSaveRowEdits}
+                    // onEditingRowCancel={handleCancelRowEdits}
+                    // renderRowActions={({ cell,row, table }) => (
+                    //   <Box sx={{ display: "flex", gap: "1rem" }}>
+                    //     <Tooltip arrow placement="left" title="View">
+                    //       <IconButton
+                    //       className="view-btn"
+                    //       onClick={() => {
+                    //           let invNo=cell.row.original.InvoiceNo;
+                    //           let enqId=cell.row.original.ID;
+                    //           sessionStorage.setItem("consultInvNo",invNo);
+                    //           sessionStorage.setItem("consultEnqId",enqId)
+                    //           navigate("/consult-view-inv")
+                    //       }}
+                
+                    //       >
+                    //         <AiOutlineEye/>
+                    //       </IconButton>
+                    //     </Tooltip>
+                    //     <Tooltip arrow placement="right" title="Delete">
+                    //       <IconButton
+                    //         color="error"
+                    //         className="delete-btn"
+                    //         onClick={(e) => {
+                    //                setdelData((pre)=>{
+                    //                   return{
+                    //                       ...pre,
+                    //                       InvoiceTid:cell.row.original.InvoiceTid
+                    //                   }
+                    //               })
+                    //               console.log(cell.row.original.InvoiceTid);
+                    //               handleShow();
+                    //         }}
+                
+                    //       >
+                    //         <HiOutlineTrash/>
+                    //       </IconButton>
+                    //     </Tooltip>
+                    //   </Box>
+                    // )}
+                
+                    positionActionsColumn="last"
+                
+                  />
+              </div>
+            </Card>
+          </Col>
+          <Col className=''>
+          <Card className='p-3'>
+            <div className="d-flex">
+
+            <Card style={{borderColor:"#FF5084"}} className='p-2'>
+              <img src={fups} alt="" className='m-auto' srcset="" width={50} height={50}/>
+            </Card>
+            <div className=' mt-2 mx-2'>
+              <p style={{fontSize:"18px",fontWeight:"600"}} className='m-0'>Today’s Follow Up’s</p>
+              <p style={{fontSize:"24px",fontWeight:"500",color:"#FF5084"}} className='m-0'>{stats?.TodaysFollowup}</p>
+                        </div>
+            </div>
+
+            <div className='mt-2'>
+            <MaterialReactTable
+                  columns={columns3}
+                  data={tfups}
+                  initialState={{ showColumnFilters: true }} //show filters by default
+                  
+                  muiTableHeadCellFilterTextFieldProps={{
+                    sx: { m: "0.5rem 0", width: "100%" },
+                    variant: "outlined",
+                  }}
+                  // enableEditing
+                  // onEditingRowSave={handleSaveRowEdits}
+                  // onEditingRowCancel={handleCancelRowEdits}
+                  // renderRowActions={({ cell,row, table }) => (
+                  //   <Box sx={{ display: "flex", gap: "1rem" }}>
+                  //     <Tooltip arrow placement="left" title="View">
+                  //       <IconButton 
+                  //       className="view-btn"
+                  //       onClick={() => {
+                  //           let invNo=cell.row.original.InvoiceNo;
+                  //           let enqId=cell.row.original.ID;
+
+                  //           sessionStorage.setItem("consultInvNo",invNo);
+                  //           sessionStorage.setItem("consultEnqId",enqId)
+
+
+                  //           navigate("/consult-view-inv")
+                  //       }}
+                        
+                  //       >
+                  //         <AiOutlineEye/>
+                  //       </IconButton>
+                  //     </Tooltip>
+                  //     <Tooltip arrow placement="right" title="Delete">
+                  //       <IconButton
+                  //         color="error"
+                  //         className="delete-btn"
+                  //         onClick={(e) => {
+                  //                setdelData((pre)=>{
+                  //                   return{
+                  //                       ...pre,
+                  //                      InvoiceTid:cell.row.original.InvoiceTid
+                  //                   }
+                  //               })
+
+                  //               console.log(cell.row.original.InvoiceTid);
+
+                  //               handleShow();
+                  //         }}
+                        
+
+                  //       >
+                  //         <HiOutlineTrash/>
+                  //       </IconButton>
+                  //     </Tooltip>
+                  //   </Box>
+                  // )}
+                 
+
+
+
+                  positionActionsColumn="last"
+                
+                />
+                </div>
+          </Card>
+          </Col>
+        </Row>
+
+
+{/* 
+        <Row className='mt-4'>
+          <Col>
+          <Card className='p-3'>
+<Row>
+  <Col>
+  <p className='graphHead'>Lead Sources</p>
+  <PieChart
+  colors={palette}
+      series={[
+        {
+          arcLabel: (item) => `${item.value}%`,
           
-          </tbody>
-         </Table>
-
-<Row className='mt-4'>
-    <Col md={6}>
-    </Col>
-    <Col md={6}>
+          // arcLabelMinAngle: 45,
+          data
+        },
+      ]}
+      sx={{
+        [`& .${pieArcLabelClasses.root}`]: {
+          fill: 'white',
+          fontWeight: 'bold',
+        },
+      }}
     
-         <Card className='p-3'>
-            <Row>
-                <Col>
-                {/* <p>Total</p>
-                <p>Discount</p>
-                <p>Tax</p> */}
-                <p>Total Amount</p>
-                <p>Received Amount</p>
-                <p>Balance Amount</p>
-                </Col>
-                <Col>
-                <div style={{float:"right"}}>
-                {/* <p>{invoiceDetails?.Total}</p>
-                <p>{invoiceDetails?.Discount}</p>
-                <p>{invoiceDetails?.TotalTax}</p> */}
-                <p>{invoiceDetails?.TotalAmount}</p>
-                <p>{invoiceDetails?.ReceivedAmount}</p>
-                <p>{invoiceDetails?.BalanceAmount}</p>
-                </div>
-                </Col>
-            </Row>
-         </Card>
-    </Col>
+      {...size}
+      slotProps={{ legend: { hidden:true  } }}
+    />
+
+<div className="d-flex mt-3">
+      <div>
+        <ul style={{listStyleType:"none"}} className='mt-2'>
+          <li>{palette?.map((clr,i)=>{
+            return(
+              <>
+        <div className='d-flex'>
+          <p className='' style={{width:"20px",height:"20px",backgroundColor:clr}}></p>
+      
+        </div>
+              </>
+            )
+          })}</li>
+        </ul>
+      </div>
+        
+        <div className='mx-2 '>
+        {
+      data?.map((p,i)=>{
+        return(
+          <>
+      
+          <p>{p?.label} ({p?.value})</p>
+          </>
+        )
+      })
+        }
+        </div>
+    </div>
+  </Col>
+  <Col>
+  <p className='graphHead'>Treatmentwise Patient Data</p>
+
+
+    <PieChart colors={palette1} series={[{ data:pnt, innerRadius: 80 }]} {...size}   slotProps={{ legend: { hidden:true  } }}>
+    <PieCenterLabel>{pntCount}</PieCenterLabel>
+    
+    </PieChart>
+
+    <div className="d-flex mt-3">
+      <div>
+        <ul style={{listStyleType:"none"}} className='mt-2'>
+          <li>{palette1?.map((clr,i)=>{
+            return(
+              <>
+        <div className='d-flex'>
+          <p className='' style={{width:"20px",height:"20px",backgroundColor:clr}}></p>
+      
+        </div>
+              </>
+            )
+          })}</li>
+        </ul>
+      </div>
+        
+        <div className='mx-2 '>
+        {
+      pnt?.map((p,i)=>{
+        return(
+          <>
+      
+          <p>{p?.label} ({p?.value})</p>
+          </>
+        )
+      })
+        }
+        </div>
+    </div>
+
+  </Col>
+  <Col>
+  <p className='graphHead'>Branchwise Patient Data</p>
+
+
+  <PieChart colors={palette2} series={[{ data:clnc, innerRadius: 80 }]} {...size} slotProps={{ legend: { hidden:true  } }}>
+  <PieCenterLabel>{clncCount}</PieCenterLabel>
+</PieChart>
+
+
+<div className="d-flex mt-3">
+      <div>
+        <ul style={{listStyleType:"none"}} className='mt-2'>
+          <li>{palette2?.map((clr,i)=>{
+            return(
+              <>
+        <div className='d-flex'>
+          <p className='' style={{width:"20px",height:"20px",backgroundColor:clr}}></p>
+      
+        </div>
+              </>
+            )
+          })}</li>
+        </ul>
+      </div>
+        
+        <div className='mx-2 '>
+        {
+      clnc?.map((p,i)=>{
+        return(
+          <>
+      
+          <p>{p?.label} ({p?.value})</p>
+          </>
+        )
+      })
+        }
+        </div>
+    </div>
+  </Col>
 </Row>
-{
-   paymentModes?.PaymentMode!=="Cash"?
-<Table responsive className='mt-5'>
-          <thead className='invTH'>
-            <tr>
-                <th className='invth'>Sr no.</th>
-                <th className='invth'>Date</th>
-                <th className='invth'>Payment Mode</th>
-                <th className='invth'>Bank Name</th>
-                <th className='invth'>Branch Name</th>
-              {paymentModes?.PaymentMode!=="UPI"? "": <th className='invth'>Transaction ID</th>}
-              {paymentModes?.PaymentMode!=="UPI"? "":<th className='invth'>UTR No.</th>}
-                <th className='invth'>Transaction Date</th>
-                <th className='invth'>Grand Total</th>
-                <th className='invth'>Received Amount (in ₹) </th>
-          
-            </tr>
-          </thead>
-
-          <tbody className='invTB'>
-
-            {
-              invoiceDetails?.PaymentModeTs?.map((p,i)=>{
-                return(
-                  <>
-                   <tr>
-                <td className='invtd'>{i+1}</td>
-                <td className='invtd'>{p?.Date}</td>
-                <td className='invtd'>{p?.PaymentMode}</td>
-                <td className='invtd'>{p?.BankName}</td>
-                <td className='invtd'>{p?.BranchName}</td>
-                {paymentModes?.PaymentMode!=="UPI"? "":<td className='invtd'>{p?.TransactionID}</td>}
-                {paymentModes?.PaymentMode!=="UPI"? "":<td className='invtd'>{p?.UTRno}</td>}
-                <td className='invtd'>{p?.TransactionDate}</td>
-                <td className='invtd'>{p?.GrandTotal}</td>
-                <td className='invtd'>{p?.ReceivedAmount}</td>
-             
-            </tr>
-                  </>
-                )
-              })
-            }
-           
-          
-          </tbody>
-         </Table>
-         :""
-}
+          </Card>
+          </Col>
+        </Row> */}
+        </Col>
+      </Row>
 
 
-
-         <p className='text-end pb-4'><b>Received Amount (in words) </b><span>{invoiceDetails?.ReceivedAmountInW}</span></p>
-
-
-         <p className='text-end mt-5 pt-5'><b>Authorized Signatory</b></p>
-
-         <hr  className='mt-3'/>
-         <p className='text-center invNoteTxt'><b><u>This is computer generated invoice and hence no signature required</u></b></p>
-         <p className='text-center invSuppTxt'>For any questions please contact us at <span style={{color:"#912AD4"}}>09619758202 / 07710056478</span> or email us at <span style={{color:"#912AD4"}}>bhaviktutwala@gmail.com</span> </p>
-            </Col>
-          </Row>
-       </Card.Body>
-       </Card>
-
-
-       <Card className='mt-5'>
-        <Card.Header as="h4" className='crdH'><p className='text-center crdH2'><u>TERMS & CONDITIONS</u></p></Card.Header>
-        <Card.Body>
-          <p className='tnc'><BsDot fontSize={25}/> <span>Fees once paid are non-refundable.</span></p>
-          <p className='tnc'><BsDot fontSize={25}/> <span>Receipt subject to realisation of Cheque.</span></p>
-          <p className='tnc'><BsDot fontSize={25}/> <span>Payment can be made by Cash/Cheque/Debit Card.</span></p>
-          <p className='tnc'><BsDot fontSize={25}/> <span>All the taxes levied/imposed by the state/central government will be to the client accounts.</span></p>
-          <p className='tnc'><BsDot fontSize={25}/> <span>Package once booked or membership once taken is non transferable under any circumstances and Dr. Pankit's Revive Multispeciality Clinic reserves right to the membership.</span></p>
-          <p className='tnc'><BsDot fontSize={25}/> <span>Advance amount paid will be valid for a period of 30 calendar days.</span></p>
-          <p className='tnc'><BsDot fontSize={25}/> <span>Conversion of any package will be entertained under any circumstances and all rights for conversion will be reserved by Dr. Pankit's Revive Multispeciality Clinic.</span></p>
-          <p className='tnc'><BsDot fontSize={25}/> <span>Validity of the packages will not be extended under any circumstances.</span></p>
-          <p className='tnc'><BsDot fontSize={25}/> <span>Results and complications are already discussed by the consulting person from the centre and you acknowledge by signing the receipt. Also results may vary from individual to individual.</span></p>
-          <p className='tnc'><BsDot fontSize={25}/> <span>Client should not bring any valuable items and articles in the centre premises and Dr. Pankit's Revive Multispeciality Clinic is not responsible for any kind of loss, theft and/or Damage of it's Damage of its member.</span></p>
-          <p className='tnc'><BsDot fontSize={25}/> <span>We advise clients to undergo all medical check up with respective speciality before opting for any package. Also Dr. Pankit's Revive Multispeciality Clinic is not responsible for any and or permanent disability or even dealth in the Dr. Pankit's partial/temporary and or permanent disability or even death in the Dr. Pankit's Revive Multispeciality Clinic Premises.</span></p>
-         
-        </Card.Body>
-
-        <Card.Footer className='crdH'>
-          <Row>
-            <Col>
-            <p className='invCont pt-2'><u>Mobile: 9619758202</u></p>
-            </Col>
-            <Col>
-            <p className='invCont2 pt-2'>www.drpanktisrevive.com</p>
-            </Col>
-          </Row>
-        </Card.Footer>
-       </Card>
-       </div>
       </Main>
     </Box>
-   
     </>
   )
 }
 
-export default ConsultationInvoiceView
+export default Dashboard2

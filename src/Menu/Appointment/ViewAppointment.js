@@ -67,6 +67,7 @@ import calendarap from "../../Assets/calendar.png";
 import invoice from "../../Assets/invoice.png";
 import addTmnt from "../../Assets/addtmt.png";
 import addColl from "../../Assets/addcoln.png";
+import Swal from "sweetalert2";
 
 const drawerWidth = 240;
 
@@ -184,6 +185,26 @@ function ViewAppointment({ calendar: calendarId, eventColor }){
     };
 
 
+    let delapName=sessionStorage.getItem("apmntName");
+
+    const [show, setShow] = useState(false);
+
+    const handleCloseModal = () => setShow(false);
+    const handleShowModal = () => setShow(true);
+
+
+    const [cancelapmnt, setcancelapmnt] = useState({
+      AppointmentID:"",
+      Reason:""
+    })
+
+
+    const handleChange=(e)=>{
+      const newdata={...cancelapmnt};
+      newdata[e.target.name]=e.target.value;
+      setcancelapmnt(newdata);
+      console.log(newdata);
+  }
 
 
     const [parentMenu, setparentMenu] = useState([]);
@@ -438,7 +459,10 @@ fetch(eventsUrl)
                     <ListItemButton
                       key={i}
                       onClick={() => {
-                         if (parent?.MenuName === "Menu") {
+                         if(parent?.MenuName === "Dashboard"){
+                         Role=="1"?navigate("/dashboard"):navigate("/dashboard2")
+                        }
+                         else if (parent?.MenuName === "Menu") {
                           handleMenuClick();
                         } else if (parent?.MenuName === "Leads/Patients") {
                           handleLpClick();
@@ -768,7 +792,7 @@ fetch(eventsUrl)
                                 return (
                                   <>
                                      <ListItemButton sx={{ pl: 3 }} onClick={()=>{
-                                      if(rpt?.MenuName==="Enquiry To Patient Conversions"){
+                                     if(rpt?.MenuName==="Enquiry To Patient Conversions"){
                                         navigate("/e2p")
                                       }
                                       else if(rpt?.MenuName==="Patients Treatment"){
@@ -788,6 +812,18 @@ fetch(eventsUrl)
                                       }
                                       else if(rpt?.MenuName==="Consultation Report"){
                                         navigate("/consult-rpt")
+                                      }
+                                      else if(rpt?.MenuName==="Invoice Report"){
+                                        navigate("/inv-rpt")
+                                      }
+                                      else if(rpt?.MenuName==="Collection Report"){
+                                        navigate("/clln-rpt")
+                                      }
+                                      else if(rpt?.MenuName==="Activity Report"){
+                                        navigate("/activity-rpt")
+                                      }
+                                      else if(rpt?.MenuName==="Appointment Cancellation Report"){
+                                        navigate("/cancelled-apmnt")
                                       }
                                     }}>
                                       <ListItemIcon>
@@ -861,6 +897,7 @@ fetch(eventsUrl)
             //  allDayMaintainDuration="false"
             //  defaultAllDay="false"
             // allDay="false"
+            // selectab
         defaultView="dayGridMonth"
         header={{
           left: "prev,next,today",
@@ -874,8 +911,24 @@ fetch(eventsUrl)
         //   { title: 'event 2', date: '2023-04-02',time:"01:21" }
         // ]}
         events={events}
-        dateClick={e => dateClickHandler(e)}
-        eventClick={e => eventsHandler(e)}
+        // dateClick={e => dateClickHandler(e)}
+        eventClick={
+          (e) =>{
+
+            eventsHandler(e)
+sessionStorage.setItem("apmntName",e.event._def.title);
+
+          console.log(e.event._def.extendedProps.AppointmentID);
+
+          setcancelapmnt((pre)=>{
+            return{
+              ...pre,
+              AppointmentID:e.event._def.extendedProps.AppointmentID
+            }
+          })
+            handleShowModal()
+          } 
+        }
 
 
         // eventContent={}
@@ -884,7 +937,73 @@ fetch(eventsUrl)
 
           
 
-         
+<Modal show={show} onHide={handleCloseModal} centered>
+        <Modal.Header closeButton>
+          <Modal.Title>Cancel appointment</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+        Do you want to cancel this appointment for <b>{delapName}</b>?
+
+        <Form.Group className="mb-3 mt-3" controlId="exampleForm.ControlTextarea1">
+        <Form.Label className="p-0 m-">Reason <span className="req-t">*</span></Form.Label>
+        <Form.Control as="textarea" name="Reason" onChange={handleChange} rows={3} />
+      </Form.Group>
+        </Modal.Body>
+        <Modal.Footer>
+          <Button variant="secondary" onClick={handleCloseModal}>
+            No
+          </Button>
+          <Button variant="primary" onClick={(e)=>{
+            e.preventDefault();
+
+            const delapUrl=`https://reviveapplication.com/ReviveAPI/Revive.svc/DeleteAppointment`;
+
+            if(cancelapmnt.Reason===""){
+              Swal.fire({
+                icon:"warning",
+                title:"Please mention reason of cancellation!"
+              })
+            }
+            else{
+
+            
+
+            fetch(delapUrl,{
+              method:"POST",
+              headers:{
+                Accept: "application/json",
+                'Content-Type': 'application/json'
+              },
+              body: JSON.stringify(cancelapmnt)
+            }).then((res)=>res.json())
+            .then((result)=>{
+              console.log(result);
+
+              if(result.Status===true){
+                Swal.fire({
+                  icon:"success",
+                  title:"Cancelled successfully!"
+                })
+
+                
+                window.location.reload();
+
+              }
+              else{
+                Swal.fire({
+                  icon:"error",
+                  title:"Something went wrong!"
+                })
+              }
+            })
+
+
+          }
+          }}>
+            Yes
+          </Button>
+        </Modal.Footer>
+      </Modal>
 
 
             </Col>

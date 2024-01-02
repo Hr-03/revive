@@ -10,18 +10,23 @@
     "@mui/icons-material": "^5.11.0",
     "@mui/material": "^5.11.8",
     "@mui/styled-engine-sc": "^5.11.0",
+    "@mui/x-charts": "^6.18.3",
     "@testing-library/jest-dom": "^5.16.5",
     "@testing-library/react": "^13.4.0",
     "@testing-library/user-event": "^13.5.0",
+    "ag-charts-react": "^9.0.1",
+    "apexcharts": "^3.45.0",
     "axios": "^1.4.0",
     "bizcharts": "^4.1.22",
     "bootstrap": "^5.2.3",
+    "export-to-csv": "^1.2.1",
     "fullcalendar": "^6.1.5",
     "jquery": "^3.6.3",
     "material-react-table": "^1.7.4",
     "moment": "^2.29.4",
     "react": "^18.2.0",
     "react-bootstrap": "^2.7.2",
+    "react-csv": "^2.2.2",
     "react-dom": "^18.2.0",
     "react-icons": "^4.7.1",
     "react-router-dom": "^6.8.1",
@@ -59,5 +64,4 @@
       "last 1 safari version"
     ]
   }
-  
 }

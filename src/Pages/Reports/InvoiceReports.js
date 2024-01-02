@@ -40,7 +40,7 @@ import { Card, Col, Row, Modal, Form, Table, Tabs, Tab,Spinner } from "react-boo
 import MaterialReactTable from "material-react-table";
 // import "../../index.css";
 import { Delete, Edit } from "@mui/icons-material";
-import { FaCheckCircle, FaRegEdit } from "react-icons/fa";
+import { FaCheckCircle, FaEye, FaRegEdit } from "react-icons/fa";
 import { HiOutlineTrash } from "react-icons/hi";
 import { useNavigate } from "react-router-dom";
 import dashIcon from "../../Assets/Dashboard.png";
@@ -67,6 +67,7 @@ import Swal from "sweetalert2";
 import invoice from "../../Assets/invoice.png";
 import addTmnt from "../../Assets/addtmt.png";
 import addColl from "../../Assets/addcoln.png";
+import { AiOutlineEye } from 'react-icons/ai';
 import { CSVLink, CSVDownload } from "react-csv";
 import { LiaDownloadSolid } from "react-icons/lia";
 
@@ -159,213 +160,238 @@ const StyledMenu = styled((props) => (
     },
   },
 }));
-function EnquiryToPatient() {
-  const [datedata, setdatedata] = useState({
-    startDate:"",
-    endDate:""
-  })
+
+function InvoiceReport() {
+
   let Role=sessionStorage.getItem("RoleId");
 
+    const [delData, setdelData] = useState({
+        InvoiceTid:""
+    })
+   
+    const [show, setShow] = useState(false);
 
-  const handleDates=(e)=>{
-    const newdata={...datedata};
-    newdata[e.target.name]=e.target.value;
-    setdatedata(newdata);
-    console.log(newdata);
-  }
+    const handleCloseDel = () => setShow(false);
+    const handleShow = () => setShow(true);
+    
+    const [datedata, setdatedata] = useState({
+        startDate:"",
+        endDate:""
+      })
+    
+    
+      const handleDates=(e)=>{
+        const newdata={...datedata};
+        newdata[e.target.name]=e.target.value;
+        setdatedata(newdata);
+        console.log(newdata);
+      }
+    
+        const navigate=useNavigate();
+        const [createModalOpen, setCreateModalOpen] = useState(false);
+    
+        const theme = useTheme();
+        const [open, setOpen] = React.useState(false);
+      
+        const handleDrawerOpen = () => {
+          setOpen(true);
+        };
+      
+        const handleDrawerClose = () => {
+          setOpen(false);
+        };
+        const [anchorEl, setAnchorEl] = React.useState(null);
+        const op = Boolean(anchorEl);
+        const handleClick = (event) => {
+          setAnchorEl(event.currentTarget);
+        };
+        const handleClose = () => {
+          setAnchorEl(null);
+        };
+    
 
-    const navigate=useNavigate();
-    const [createModalOpen, setCreateModalOpen] = useState(false);
-
-    const theme = useTheme();
-    const [open, setOpen] = React.useState(false);
-  
-    const handleDrawerOpen = () => {
-      setOpen(true);
-    };
-  
-    const handleDrawerClose = () => {
-      setOpen(false);
-    };
-    const [anchorEl, setAnchorEl] = React.useState(null);
-    const op = Boolean(anchorEl);
-    const handleClick = (event) => {
-      setAnchorEl(event.currentTarget);
-    };
-    const handleClose = () => {
-      setAnchorEl(null);
-    };
-
-    // let Role=sessionStorage.getItem("RoleId");
+        // let Role=sessionStorage.getItem("RoleId");
 
     let User=Role=="1"?0:Role=="11"?0:sessionStorage.getItem("UserId")
-
-  const [E2P, setE2P] = useState([]);
-
-  const getE2PUrl=`https://reviveapplication.com/ReviveAPI/Revive.svc/GetEnquiryToPConversion/0/0/${User}`;
-useEffect(()=>{
-  fetch(getE2PUrl)
-  .then((res)=>res.json())
-  .then((geteRes)=>{
-    console.log(geteRes.Data);
-    setE2P(geteRes.Data)
-  })
-},[])
-
-
-    const columns = useMemo(
-        () => [
-          // {
-          //   accessorKey: "UserID",
-          //   header: "User ID",
-          //   muiTableHeadCellFilterTextFieldProps: { placeholder: "User ID" },
+    
+      const [invoices, setInvoices] = useState([]);
+    
+      const getE2PUrl=`https://reviveapplication.com/ReviveAPI/Revive.svc/GetInvoiceViewList/0/0/${User}`;
+    useEffect(()=>{
+      fetch(getE2PUrl)
+      .then((res)=>res.json())
+      .then((geteRes)=>{
+        console.log(geteRes.Data);
+        setInvoices(geteRes.Data)
+      })
+    },[])
+    
+    
+        const columns = useMemo(
+            () => [
+              // {
+              //   accessorKey: "UserID",
+              //   header: "User ID",
+              //   muiTableHeadCellFilterTextFieldProps: { placeholder: "User ID" },
+                
+              // },
+              // {
+              //   accessorKey: "DoctorName",
+              //   header: "Doctor Name",
+              //   // Cell:({cell})=>{
+              //   //   let imurl=cell.getValue();
+    
+              //   //   return <div>{<img src={imurl?imurl:"https://swargworld.com/wp-content/uploads/2017/01/No_image_available.jpg"} width={150} height={150}/>}</div>
+              //   // }
+              // },
+              {
+                accessorKey: "InvoiceNo",
+                header: "Invoice No",
+              },
+              {
+                accessorKey: "InvoiceDate",
+                header: "Invoice Date",
+                Cell:({cell})=>{
+                  let date=cell.getValue();
+                  return <div>{date.split(" ")[0]}</div>
+                },
+                filterFn: (row, id, filterValue) =>
+            row.getValue(id).startsWith(filterValue),
+              },
+              {
+                accessorKey: "PatientName",
+                header: "Patient Name",
+              },
+              {
+                accessorKey: "PatientMobile",
+                header: "Patient Mobile No.",
+              },
+              {
+                accessorKey: "ClinicName",
+                header: "Clinic Name",
+              },
+              {
+                accessorKey: "DoctorName",
+                header: "Doctor Name",
+                // Cell:({cell})=>{
+                //   let date=cell.getValue();
+                //   return <div>{date.split(" ")[0]}</div>
+                // }
+              },
+              {
+                accessorKey: "TotalAmount",
+                header: "Total Amount",
+              },
+              {
+                accessorKey: "ReceivedAmount",
+                header: "Received Amount",
+              },
+              {
+                accessorKey: "PendingAmount",
+                header: "Pending Amount",
+              },
             
-          // },
-          // {
-          //   accessorKey: "DoctorName",
-          //   header: "Doctor Name",
-          //   // Cell:({cell})=>{
-          //   //   let imurl=cell.getValue();
-
-          //   //   return <div>{<img src={imurl?imurl:"https://swargworld.com/wp-content/uploads/2017/01/No_image_available.jpg"} width={150} height={150}/>}</div>
-          //   // }
-          // },
-          {
-            accessorKey: "LeadName",
-            header: "Patient Name",
-          },
-          {
-            accessorKey: "EnquiryDate",
-            header: "Enquiry Date",
-            Cell:({cell})=>{
-              let date=cell.getValue();
-              return <div>{date.split(" ")[0]}</div>
-            },
-            filterFn: (row, id, filterValue) =>
-        row.getValue(id).startsWith(filterValue),
-          },
-          {
-            accessorKey: "NumberOfFollowup",
-            header: "Number Of Followups",
-          },
-          {
-            accessorKey: "NoOfDaysToConvert",
-            header: "Days to Convert",
-          },
-          {
-            accessorKey: "AssignedToUser",
-            header: "Assigned to",
-            // Cell:({cell})=>{
-            //   let date=cell.getValue();
-            //   return <div>{date.split(" ")[0]}</div>
-            // }
-          },
-          {
-            accessorKey: "Status",
-            header: "Status",
-          },
+             
+             
+          
+            ],
+            []
+          );
         
          
-         
+    
+          const [parentMenu, setparentMenu] = useState([]);
+    
+          const [mainMenu, setmainMenu] = useState([]);
+        
+          const [clinicSetting, setclinicSetting] = useState([]);
+        
+          const [treatmentMenu, settreatmentMenu] = useState([]);
+        
+          const [userSetting, setuserSetting] = useState([]);
+        
+          const [lpMenu, setlpMenu] = useState([]);
+        
+          const [apmntMenu, setapmntMenu] = useState([]);
+        
+          const [reportMenu, setreportMenu] = useState([]);
+        
+          const [menuList, setMenuList] = useState([]);
+        
+      const menuUrl = `https://reviveapplication.com/ReviveAPI/Revive.svc/GetMenuAccess/${Role}`;
+          useEffect(() => {
+            fetch(menuUrl)
+              .then((res) => res.json())
+              .then((list) => {
+                console.log(list.Data);
+                setMenuList(list.Data);
+        
+                setparentMenu(list.Data.filter((parent, i) => parent.Parent === 0));
+                // console.log(list.Data.filter((parent,i)=>parent.Parent===0));
+        
+                setmainMenu(list.Data.filter((main, i) => main.Parent === 3));
+                // console.log(list.Data.filter((main,i)=>main.Parent===3));
+        
+                setlpMenu(list.Data.filter((lp, i) => lp.Parent === 6));
+                // console.log(list.Data.filter((lp,i)=>lp.Parent===6));
+        
+                setreportMenu(list.Data.filter((rpt, i) => rpt.Parent === 8));
+                // console.log(list.Data.filter((rpt,i)=>rpt.Parent===8));
+        
+                setclinicSetting(list.Data.filter((cs, i) => cs.Parent === 4));
+                // console.log(list.Data.filter((cs,i)=>cs.Parent===4);
+        
+                setuserSetting(list.Data.filter((user, i) => user.Parent === 5));
+                // console.log(list.Data.filter(((user,i)=>user.Parent===5)));
+        
+                settreatmentMenu(list.Data.filter((treat, i) => treat.Parent === 9));
+                // console.log(list.Data.filter((treat,i)=>treat.Parent===9));
+        
+                setapmntMenu(list.Data.filter((apmnt, i) => apmnt.Parent === 7));
+                // console.log(list.Data.filter((apmnt,i)=>apmnt.Parent===7));
+              });
+          }, []);
+        
+    
+      const [open1, setOpen1] = React.useState(false);
+    
+      const handleMenuClick = () => {
+        setOpen1(!open1);
+      };
+      const [open2, setOpen2] = React.useState(false);
+    
+      const handleCsClick = () => {
+        setOpen2(!open2);
+      };
       
-        ],
-        []
-      );
+      const [open3, setOpen3] = React.useState(false);
     
-     
-
-      const [parentMenu, setparentMenu] = useState([]);
-
-      const [mainMenu, setmainMenu] = useState([]);
+      const handleTreatClick = () => {
+        setOpen3(!open3);
+      };
+      const [open4, setOpen4] = React.useState(false);
     
-      const [clinicSetting, setclinicSetting] = useState([]);
+      const handleUserClick = () => {
+        setOpen4(!open4);
+      };
+      const [open5, setOpen5] = React.useState(false);
     
-      const [treatmentMenu, settreatmentMenu] = useState([]);
+      const handleLpClick = () => {
+        setOpen5(!open5);
+      };
+      const [open6, setOpen6] = React.useState(false);
     
-      const [userSetting, setuserSetting] = useState([]);
+      const handleApClick = () => {
+        setOpen6(!open6);
+      };
+      const [open7, setOpen7] = React.useState(false);
     
-      const [lpMenu, setlpMenu] = useState([]);
-    
-      const [apmntMenu, setapmntMenu] = useState([]);
-    
-      const [reportMenu, setreportMenu] = useState([]);
-    
-      const [menuList, setMenuList] = useState([]);
-    
-  const menuUrl = `https://reviveapplication.com/ReviveAPI/Revive.svc/GetMenuAccess/${Role}`;
-      useEffect(() => {
-        fetch(menuUrl)
-          .then((res) => res.json())
-          .then((list) => {
-            console.log(list.Data);
-            setMenuList(list.Data);
-    
-            setparentMenu(list.Data.filter((parent, i) => parent.Parent === 0));
-            // console.log(list.Data.filter((parent,i)=>parent.Parent===0));
-    
-            setmainMenu(list.Data.filter((main, i) => main.Parent === 3));
-            // console.log(list.Data.filter((main,i)=>main.Parent===3));
-    
-            setlpMenu(list.Data.filter((lp, i) => lp.Parent === 6));
-            // console.log(list.Data.filter((lp,i)=>lp.Parent===6));
-    
-            setreportMenu(list.Data.filter((rpt, i) => rpt.Parent === 8));
-            // console.log(list.Data.filter((rpt,i)=>rpt.Parent===8));
-    
-            setclinicSetting(list.Data.filter((cs, i) => cs.Parent === 4));
-            // console.log(list.Data.filter((cs,i)=>cs.Parent===4);
-    
-            setuserSetting(list.Data.filter((user, i) => user.Parent === 5));
-            // console.log(list.Data.filter(((user,i)=>user.Parent===5)));
-    
-            settreatmentMenu(list.Data.filter((treat, i) => treat.Parent === 9));
-            // console.log(list.Data.filter((treat,i)=>treat.Parent===9));
-    
-            setapmntMenu(list.Data.filter((apmnt, i) => apmnt.Parent === 7));
-            // console.log(list.Data.filter((apmnt,i)=>apmnt.Parent===7));
-          });
-      }, []);
-    
-
-  const [open1, setOpen1] = React.useState(false);
-
-  const handleMenuClick = () => {
-    setOpen1(!open1);
-  };
-  const [open2, setOpen2] = React.useState(false);
-
-  const handleCsClick = () => {
-    setOpen2(!open2);
-  };
-  
-  const [open3, setOpen3] = React.useState(false);
-
-  const handleTreatClick = () => {
-    setOpen3(!open3);
-  };
-  const [open4, setOpen4] = React.useState(false);
-
-  const handleUserClick = () => {
-    setOpen4(!open4);
-  };
-  const [open5, setOpen5] = React.useState(false);
-
-  const handleLpClick = () => {
-    setOpen5(!open5);
-  };
-  const [open6, setOpen6] = React.useState(false);
-
-  const handleApClick = () => {
-    setOpen6(!open6);
-  };
-  const [open7, setOpen7] = React.useState(false);
-
-  const handleReportClick = () => {
-    setOpen7(!open7);
-  };
+      const handleReportClick = () => {
+        setOpen7(!open7);
+      };
   return (
-    <>
-     <Box sx={{ display: 'flex' }}>
+   <>
+    <Box sx={{ display: 'flex' }}>
       <CssBaseline />
       <AppBar position="fixed" open={open} className="navigBar">
           <Toolbar>
@@ -892,7 +918,7 @@ useEffect(()=>{
        <Card className="m-1 mt-3 emp-crd p-3">
         <Row>
             <Col>
-            <p className="ap-t">Enquiry to Patient Conversion</p>
+            <p className="ap-t">Invoice Report</p>
             <hr />
         <Row className="mt-4">
           <Col>
@@ -912,12 +938,12 @@ useEffect(()=>{
       <Button variant='' className='mx-3 rptBtn mt-4' onClick={(e)=>{
         e.preventDefault();
 
-        const datefiltered=`https://reviveapplication.com/ReviveAPI/Revive.svc/GetEnquiryToPConversion/${datedata?.startDate}/${datedata?.endDate}`
+        const datefiltered=`https://reviveapplication.com/ReviveAPI/Revive.svc/GetInvoiceViewList/${datedata?.startDate}/${datedata?.endDate}`
         fetch(datefiltered)
         .then((res)=>res.json())
         .then((geteRes)=>{
           console.log(geteRes.Data);
-          setE2P(geteRes.Data)
+          setInvoices(geteRes.Data)
         })
 
       }}>Search</Button>
@@ -942,45 +968,66 @@ useEffect(()=>{
 
 
 <div className='d-flex justify-content-between m-2'>
-  <CSVLink data={E2P} style={{textDecoration:"none",color:"white",backgroundColor:"green",borderRadius:"5px"}} className='p-2'><LiaDownloadSolid fontSize={25}/>Excel</CSVLink>
+  <CSVLink data={invoices} style={{textDecoration:"none",color:"white",backgroundColor:"green",borderRadius:"5px"}} className='p-2'><LiaDownloadSolid fontSize={25}/>Excel</CSVLink>
   {/* <p className='text-end'><b>Total :</b>{Total}</p> */}
 </div>
 
             <MaterialReactTable
                   columns={columns}
-                  data={E2P}
+                  data={invoices}
                   initialState={{ showColumnFilters: true }} //show filters by default
                   
                   muiTableHeadCellFilterTextFieldProps={{
                     sx: { m: "0.5rem 0", width: "100%" },
                     variant: "outlined",
                   }}
-                  // enableEditing
+                  enableEditing
                   // onEditingRowSave={handleSaveRowEdits}
                   // onEditingRowCancel={handleCancelRowEdits}
-                  // renderRowActions={({ row, table }) => (
-                  //   <Box sx={{ display: "flex", gap: "1rem" }}>
-                  //     <Tooltip arrow placement="left" title="Edit">
-                  //       <IconButton 
-                  //       className="edit-btn"
-                  //       onClick={() => table.setEditingRow(row)}
-                  //       disabled
-                  //       >
-                  //         <FaRegEdit/>
-                  //       </IconButton>
-                  //     </Tooltip>
-                  //     <Tooltip arrow placement="right" title="Delete">
-                  //       <IconButton
-                  //         color="error"
-                  //         // onClick={() => handleDeleteRow(row)}
-                  //       disabled
+                  renderRowActions={({ cell,row, table }) => (
+                    <Box sx={{ display: "flex", gap: "1rem" }}>
+                      <Tooltip arrow placement="left" title="View">
+                        <IconButton 
+                        className="view-btn"
+                        onClick={() => {
+                            let invNo=cell.row.original.InvoiceNo;
+                            let pntId=cell.row.original.PatientID;
 
-                  //       >
-                  //         <HiOutlineTrash/>
-                  //       </IconButton>
-                  //     </Tooltip>
-                  //   </Box>
-                  // )}
+                            sessionStorage.setItem("InvNo",invNo);
+                            sessionStorage.setItem("collectionPatient",pntId)
+
+
+                            navigate("/view-inv")
+                        }}
+                        
+                        >
+                          <AiOutlineEye/>
+                        </IconButton>
+                      </Tooltip>
+                      <Tooltip arrow placement="right" title="Delete">
+                        <IconButton
+                          color="error"
+                          className="delete-btn"
+                          onClick={(e) => {
+                                setdelData((pre)=>{
+                                    return{
+                                        ...pre,
+                                        InvoiceTid:cell.row.original.InvoiceTid
+                                    }
+                                })
+
+                                console.log(cell.row.original.InvoiceTid);
+
+                                handleShow();
+                          }}
+                        
+
+                        >
+                          <HiOutlineTrash/>
+                        </IconButton>
+                      </Tooltip>
+                    </Box>
+                  )}
                  
 
 
@@ -989,15 +1036,61 @@ useEffect(()=>{
                 
                 />
 
+<Modal show={show} onHide={handleCloseDel} centered>
+        <Modal.Header closeButton>
+          <Modal.Title>Delete</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>Do you want to delete this Invoice?</Modal.Body>
+        <Modal.Footer>
+          <Button variant="" onClick={handleCloseDel}>
+            No
+          </Button>
+          <Button variant="" onClick={(e)=>{
+e.preventDefault();
 
+const delUrl=`https://reviveapplication.com/ReviveAPI/Revive.svc/DeleteInvoice`;
+
+
+
+fetch(delUrl,{
+    method:"POST",
+    headers:{
+      Accept: "application/json",
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify(delData)
+  }).then((res)=>res.json())
+  .then((result)=>{
+    console.log(result);
+
+    if(result.Status===true){
+        Swal.fire({
+            icon:"success",
+            title:"Deleted successfully!"
+        })
+        
+        window.location.reload();
+    }
+    else{
+        Swal.fire({
+            icon:"error",
+            title:"Something went wrong!"
+        })
+    }
+  })
+          }}>
+            Yes
+          </Button>
+        </Modal.Footer>
+      </Modal>
 
             </Col>
         </Row>
        </Card>
       </Main>
     </Box>
-    </>
+   </>
   )
 }
 
-export default EnquiryToPatient
+export default InvoiceReport

@@ -164,12 +164,13 @@ const AddCollection = () => {
 
 
 
+    let UserId=sessionStorage.getItem("UserId");
 
 
 
     const [patients, setPatients] = useState([]);
 
-    const pUrl=`https://reviveapplication.com/ReviveAPI/Revive.svc/GetPatientList`;
+    const pUrl=`https://reviveapplication.com/ReviveAPI/Revive.svc/GetPatientList/${UserId}`;
     
     useEffect(()=>{
        fetch(pUrl)
@@ -522,16 +523,64 @@ let pId=sessionStorage.getItem("collectionPatient");
   })
 
   
+  const [diff, setdiff] = useState({
+    tpa:"",
+    tc:""
+  })
   const handleChange=(e)=>{
     const newdata={...collection};
     newdata[e.target.name]=e.target.value;
     setCollection(newdata);
     console.log(newdata);
 
-   
+
+    setdiff((pre)=>{
+      return{
+        ...pre,
+        tpa:newdata.TotalPaidAmount,
+        tc:newdata.TotalCost
+      }
+    })
+
+    // if(newdata.TotalPaidAmount > newdata.TotalCost){
+    //   // Swal.fire({
+    //   //   icon:"warning",
+    //   //   title:"Total paid amount cannot be more than total amount!",
+    //   //   text:"please check entered value and try again!"
+    //   // })
+  
+    //   // alert("check values")
+    // }
 
    
+let a=document.getElementById("tpa").value;
+
+
+
+    setCollection((pre)=>{
+      return{
+        ...pre,
+        // PendingAmount:b,
+        TotalPaidAmount:a,
+      }
+    })
+
+   
+   
 }
+
+
+
+useEffect(()=>{
+  setCollection((pre)=>{
+    return{
+      ...pre,
+      PendingAmount:(collection?.TotalCost)-(collection?.TotalPaidAmount)
+    }
+  })
+
+  console.log(collection);
+},[collection?.TotalPaidAmount])
 
 
 const handleInvoice=()=>{
@@ -557,6 +606,8 @@ let invN=document.getElementById("invNo").value;
   }
 
 
+  
+
   console.log(collection);
 
 }
@@ -569,6 +620,31 @@ const handleSubmitCollection=(e)=>{
   sessionStorage.setItem("InvNo",collection?.InvoiceNo)
 
   const colnUrl=`https://reviveapplication.com/ReviveAPI/Revive.svc/AddNewCollection`;
+
+
+
+  if(collection?.PaymentModeID===""){
+Swal.fire({
+  icon:"warning",
+  title:"Select payment mode!"
+})
+  }
+  else if(collection?.TotalPaidAmount===""){
+    Swal.fire({
+      icon:"warning",
+      title:"Enter total paid amount!"
+    })
+  }
+  else if(diff.tpa>diff.tc){
+Swal.fire({
+         icon:"warning",
+         title:"Total paid amount cannot be more than total amount!",
+         text:"please check entered value and try again!"
+       })
+  }
+  else{
+
+  
 
   fetch(colnUrl,{
     method:"POST",
@@ -592,6 +668,7 @@ const handleSubmitCollection=(e)=>{
       prntBtn.style.display="block";
     }
   })
+}
 }
 
 
@@ -748,7 +825,10 @@ const formatResult = (item) => {
                     <ListItemButton
                       key={i}
                       onClick={() => {
-                         if (parent?.MenuName === "Menu") {
+                         if(parent?.MenuName === "Dashboard"){
+                         Role=="1"?navigate("/dashboard"):navigate("/dashboard2")
+                        }
+                         else if (parent?.MenuName === "Menu") {
                           handleMenuClick();
                         } else if (parent?.MenuName === "Leads/Patients") {
                           handleLpClick();
@@ -1078,7 +1158,7 @@ const formatResult = (item) => {
                                 return (
                                   <>
                                      <ListItemButton sx={{ pl: 3 }} onClick={()=>{
-                                      if(rpt?.MenuName==="Enquiry To Patient Conversions"){
+                                     if(rpt?.MenuName==="Enquiry To Patient Conversions"){
                                         navigate("/e2p")
                                       }
                                       else if(rpt?.MenuName==="Patients Treatment"){
@@ -1098,6 +1178,18 @@ const formatResult = (item) => {
                                       }
                                       else if(rpt?.MenuName==="Consultation Report"){
                                         navigate("/consult-rpt")
+                                      }
+                                      else if(rpt?.MenuName==="Invoice Report"){
+                                        navigate("/inv-rpt")
+                                      }
+                                      else if(rpt?.MenuName==="Collection Report"){
+                                        navigate("/clln-rpt")
+                                      }
+                                      else if(rpt?.MenuName==="Activity Report"){
+                                        navigate("/activity-rpt")
+                                      }
+                                      else if(rpt?.MenuName==="Appointment Cancellation Report"){
+                                        navigate("/cancelled-apmnt")
                                       }
                                     }}>
                                       <ListItemIcon>
@@ -1230,13 +1322,7 @@ resultStringKeyName="Name"
 
                     </Form.Group>
                     </Col>
-                    <Col md={2}>
-                    <Form.Group>
-                        <Form.Label>Pending Amount</Form.Label>
-                        <Form.Control type='number' name='PendingAmount' onChange={handleChange}/>
-
-                    </Form.Group>
-                    </Col>
+                   
 
                 </Row>
 
@@ -1483,10 +1569,17 @@ collection?.PaymentModeID==="3"?    <Row className='mt-3' id='upi' >
     <Col md={2}>
     <Form.Group>
         <Form.Label>Total Paid Amount</Form.Label>
-        <Form.Control type='number' name='TotalPaidAmount' onChange={handleChange}/>
+        <Form.Control type='number' name='TotalPaidAmount' id='tpa' onChange={handleChange}/>
 
     </Form.Group>
     </Col>
+    <Col md={2}>
+                    <Form.Group>
+                        <Form.Label>Pending Amount</Form.Label>
+                        <Form.Control type='number' id="penamt" name='PendingAmount' readOnly value={collection?.TotalCost-collection?.TotalPaidAmount}/>
+
+                    </Form.Group>
+                    </Col>
 </Row>
 
 

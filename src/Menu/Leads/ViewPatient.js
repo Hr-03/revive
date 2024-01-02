@@ -438,7 +438,10 @@ let patientId=sessionStorage.getItem("viewpnt");
                     <ListItemButton
                       key={i}
                       onClick={() => {
-                         if (parent?.MenuName === "Menu") {
+                         if(parent?.MenuName === "Dashboard"){
+                         Role=="1"?navigate("/dashboard"):navigate("/dashboard2")
+                        }
+                         else if (parent?.MenuName === "Menu") {
                           handleMenuClick();
                         } else if (parent?.MenuName === "Leads/Patients") {
                           handleLpClick();
@@ -768,7 +771,7 @@ let patientId=sessionStorage.getItem("viewpnt");
                                 return (
                                   <>
                                      <ListItemButton sx={{ pl: 3 }} onClick={()=>{
-                                      if(rpt?.MenuName==="Enquiry To Patient Conversions"){
+                                     if(rpt?.MenuName==="Enquiry To Patient Conversions"){
                                         navigate("/e2p")
                                       }
                                       else if(rpt?.MenuName==="Patients Treatment"){
@@ -788,6 +791,18 @@ let patientId=sessionStorage.getItem("viewpnt");
                                       }
                                       else if(rpt?.MenuName==="Consultation Report"){
                                         navigate("/consult-rpt")
+                                      }
+                                      else if(rpt?.MenuName==="Invoice Report"){
+                                        navigate("/inv-rpt")
+                                      }
+                                      else if(rpt?.MenuName==="Collection Report"){
+                                        navigate("/clln-rpt")
+                                      }
+                                      else if(rpt?.MenuName==="Activity Report"){
+                                        navigate("/activity-rpt")
+                                      }
+                                      else if(rpt?.MenuName==="Appointment Cancellation Report"){
+                                        navigate("/cancelled-apmnt")
                                       }
                                     }}>
                                       <ListItemIcon>
@@ -944,6 +959,127 @@ let patientId=sessionStorage.getItem("viewpnt");
                         </Col>
                     </Row>
 
+
+          <Row>
+            <Col>
+            <p className="" style={{fontSize:"18px",fontWeight:"500"}}>Physical Generals</p>
+
+<Row>
+  <Col>
+  
+            <p className="dt-lbl">Craving: <span style={{fontWeight:"normal"}}>{profile[0]?.Craving}</span></p>
+  </Col>
+  <Col>
+  
+            <p className="dt-lbl">Aversions: <span style={{fontWeight:"normal"}}>{profile[0]?.Aversions}</span></p>
+  </Col>
+</Row>
+<Row>
+  <Col>
+  
+            <p className="dt-lbl">Thirst: <span style={{fontWeight:"normal"}}>{profile[0]?.Thirst}</span></p>
+  </Col>
+  <Col>
+  
+            <p className="dt-lbl">Perspiration: <span style={{fontWeight:"normal"}}>{profile[0]?.Perspiration}</span></p>
+  </Col>
+</Row>
+<Row>
+  <Col>
+  
+            <p className="dt-lbl">Sleep: <span style={{fontWeight:"normal"}}>{profile[0]?.Sleep}</span></p>
+  </Col>
+  <Col>
+  
+            <p className="dt-lbl">Dreams: <span style={{fontWeight:"normal"}}>{profile[0]?.Dreams}</span></p>
+  </Col>
+</Row>
+<Row>
+  <Col>
+  
+            <p className="dt-lbl">Thermals: <span style={{fontWeight:"normal"}}>{profile[0]?.Thermals}</span></p>
+  </Col>
+  <Col>
+  
+            <p className="dt-lbl">Bathing: <span style={{fontWeight:"normal"}}>{profile[0]?.Bathing}</span></p>
+  </Col>
+</Row>
+<Row>
+  <Col>
+  
+            <p className="dt-lbl">Covering: <span style={{fontWeight:"normal"}}>{profile[0]?.Covering}</span></p>
+  </Col>
+  <Col>
+  
+            <p className="dt-lbl">Seasons: <span style={{fontWeight:"normal"}}>{profile[0]?.Seasons}</span></p>
+  </Col>
+</Row>
+<Row>
+  <Col>
+  
+            <p className="dt-lbl">Urine and Stool: <span style={{fontWeight:"normal"}}>{profile[0]?.UrineNStool}</span></p>
+  </Col>
+ 
+</Row>
+<Row>
+  <Col>
+  
+            <p className="dt-lbl">F/H: <span style={{fontWeight:"normal"}}>{profile[0]?.FH}</span></p>
+  </Col>
+ 
+</Row>
+{/* <p className="mt-2 dt-lbl">PERSONAL HISTORY:</p> */}
+<Row>
+  <Col>
+  
+            <p className="dt-lbl">PERSONAL HISTORY: <span style={{fontWeight:"normal"}}>{profile[0]?.PersonalHistory}</span></p>
+  </Col>
+ 
+</Row>
+<Row>
+  <Col>
+  
+            <p className="dt-lbl">Mentals: <span style={{fontWeight:"normal"}}>{profile[0]?.Mentals}</span></p>
+  </Col>
+  <Col>
+  
+            <p className="dt-lbl">Lifespace & Reactivity: <span style={{fontWeight:"normal"}}>{profile[0]?.LifespaceReactivity}</span></p>
+  </Col>
+ 
+</Row>
+<Row>
+  <Col>
+  
+            <p className="dt-lbl">Menses: <span style={{fontWeight:"normal"}}>{profile[0]?.MensesTotality}</span></p>
+  </Col>
+  <Col>
+  
+            <p className="dt-lbl">Totality: <span style={{fontWeight:"normal"}}>{profile[0]?.Totality}</span></p>
+  </Col>
+ 
+</Row>
+{/* <Row>
+  <Col>
+  
+            <p className="dt-lbl">Menses:<span style={{fontWeight:"normal"}}>{profile[0]?.TreatmentExplanation}</span></p>
+  </Col>
+  <Col>
+  
+            <p className="dt-lbl">Totality:<span style={{fontWeight:"normal"}}>{profile[0]?.TreatmentExplanation}</span></p>
+  </Col>
+ 
+</Row> */}
+<Row>
+  <Col>
+  
+            <p className="dt-lbl">Medicine: <span style={{fontWeight:"normal"}}>{profile[0]?.Medicine}</span></p>
+  </Col>
+
+ 
+</Row>
+
+            </Col>
+          </Row>
 
                     <Row>
                         <Col lg={1}>

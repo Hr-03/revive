@@ -68,6 +68,8 @@ import addTmnt from "../../Assets/addtmt.png";
 import addColl from "../../Assets/addcoln.png";
 import cnslt from "../../Assets/consultation.png";
 import Swal from "sweetalert2";
+import { CSVLink, CSVDownload } from "react-csv";
+import { LiaDownloadSolid } from "react-icons/lia";
 const drawerWidth = 240;
 
 const Main = styled('main', { shouldForwardProp: (prop) => prop !== 'open' })(
@@ -235,8 +237,10 @@ function Patients(){
               let date=cell.getValue();
               return <div>{date.split(" ")[0]}</div>
             },
-            filterVariant:"range",
-            filterFn:"betweenInclusive"
+            filterFn: (row, id, filterValue) =>
+        row.getValue(id).startsWith(filterValue),
+            // filterVariant:"range",
+            // filterFn:"betweenInclusive" works for date range
            
           },
           {
@@ -474,7 +478,10 @@ function Patients(){
                     <ListItemButton
                       key={i}
                       onClick={() => {
-                         if (parent?.MenuName === "Menu") {
+                         if(parent?.MenuName === "Dashboard"){
+                         Role=="1"?navigate("/dashboard"):navigate("/dashboard2")
+                        }
+                         else if (parent?.MenuName === "Menu") {
                           handleMenuClick();
                         } else if (parent?.MenuName === "Leads/Patients") {
                           handleLpClick();
@@ -804,7 +811,7 @@ function Patients(){
                                 return (
                                   <>
                                      <ListItemButton sx={{ pl: 3 }} onClick={()=>{
-                                      if(rpt?.MenuName==="Enquiry To Patient Conversions"){
+                                     if(rpt?.MenuName==="Enquiry To Patient Conversions"){
                                         navigate("/e2p")
                                       }
                                       else if(rpt?.MenuName==="Patients Treatment"){
@@ -824,6 +831,18 @@ function Patients(){
                                       }
                                       else if(rpt?.MenuName==="Consultation Report"){
                                         navigate("/consult-rpt")
+                                      }
+                                      else if(rpt?.MenuName==="Invoice Report"){
+                                        navigate("/inv-rpt")
+                                      }
+                                      else if(rpt?.MenuName==="Collection Report"){
+                                        navigate("/clln-rpt")
+                                      }
+                                      else if(rpt?.MenuName==="Activity Report"){
+                                        navigate("/activity-rpt")
+                                      }
+                                      else if(rpt?.MenuName==="Appointment Cancellation Report"){
+                                        navigate("/cancelled-apmnt")
                                       }
                                     }}>
                                       <ListItemIcon>
@@ -904,6 +923,11 @@ function Patients(){
                     </Row>
                 </Col>
             </Row> */}
+
+<div className='d-flex justify-content-between m-2'>
+  <CSVLink data={patients} style={{textDecoration:"none",color:"white",backgroundColor:"green",borderRadius:"5px"}} className='p-2'><LiaDownloadSolid fontSize={25}/>Excel</CSVLink>
+  {/* <p className='text-end'><b>Total :</b>{Total}</p> */}
+</div>
 
             <MaterialReactTable
                   columns={columns}

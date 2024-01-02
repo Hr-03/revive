@@ -211,6 +211,7 @@ const TodaysFollowups = () => {
                     </>
                 )
             }
+            
           },
           {
             accessorKey: "MobileNo",
@@ -318,7 +319,7 @@ const TodaysFollowups = () => {
 
       let Role=sessionStorage.getItem("RoleId");
 
-      let User=Role==="1"?0:sessionStorage.getItem("UserId")
+      let User=Role=="1"?0:Role=="11"?0:sessionStorage.getItem("UserId")
 
 
       const tfUrl=`https://reviveapplication.com/ReviveAPI/Revive.svc/GetTodaysFollowupList/${User}`
@@ -527,7 +528,10 @@ const TodaysFollowups = () => {
                     <ListItemButton
                       key={i}
                       onClick={() => {
-                         if (parent?.MenuName === "Menu") {
+                         if(parent?.MenuName === "Dashboard"){
+                         Role=="1"?navigate("/dashboard"):navigate("/dashboard2")
+                        }
+                         else if (parent?.MenuName === "Menu") {
                           handleMenuClick();
                         } else if (parent?.MenuName === "Leads/Patients") {
                           handleLpClick();
@@ -857,7 +861,7 @@ const TodaysFollowups = () => {
                                 return (
                                   <>
                                      <ListItemButton sx={{ pl: 3 }} onClick={()=>{
-                                      if(rpt?.MenuName==="Enquiry To Patient Conversions"){
+                                     if(rpt?.MenuName==="Enquiry To Patient Conversions"){
                                         navigate("/e2p")
                                       }
                                       else if(rpt?.MenuName==="Patients Treatment"){
@@ -877,6 +881,18 @@ const TodaysFollowups = () => {
                                       }
                                       else if(rpt?.MenuName==="Consultation Report"){
                                         navigate("/consult-rpt")
+                                      }
+                                      else if(rpt?.MenuName==="Invoice Report"){
+                                        navigate("/inv-rpt")
+                                      }
+                                      else if(rpt?.MenuName==="Collection Report"){
+                                        navigate("/clln-rpt")
+                                      }
+                                      else if(rpt?.MenuName==="Activity Report"){
+                                        navigate("/activity-rpt")
+                                      }
+                                      else if(rpt?.MenuName==="Appointment Cancellation Report"){
+                                        navigate("/cancelled-apmnt")
                                       }
                                     }}>
                                       <ListItemIcon>
@@ -967,28 +983,28 @@ const TodaysFollowups = () => {
                     sx: { m: "0.5rem 0", width: "100%" },
                     variant: "outlined",
                   }}
-                  enableEditing
+                  // enableEditing
                   // onEditingRowSave={handleSaveRowEdits}
                   // onEditingRowCancel={handleCancelRowEdits}
-                  renderRowActions={({ row, table }) => (
-                    <Box sx={{ display: "flex", gap: "1rem" }}>
-                      <Tooltip arrow placement="left" title="Edit">
-                        <IconButton 
-                        className="edit-btn"
-                        onClick={() => table.setEditingRow(row)}>
-                          <FaRegEdit/>
-                        </IconButton>
-                      </Tooltip>
-                      <Tooltip arrow placement="right" title="Delete">
-                        <IconButton
-                          color="error"
-                          // onClick={() => handleDeleteRow(row)}
-                        >
-                          <HiOutlineTrash/>
-                        </IconButton>
-                      </Tooltip>
-                    </Box>
-                  )}
+                  // renderRowActions={({ row, table }) => (
+                  //   <Box sx={{ display: "flex", gap: "1rem" }}>
+                  //     <Tooltip arrow placement="left" title="Edit">
+                  //       <IconButton 
+                  //       className="edit-btn"
+                  //       onClick={() => table.setEditingRow(row)}>
+                  //         <FaRegEdit/>
+                  //       </IconButton>
+                  //     </Tooltip>
+                  //     <Tooltip arrow placement="right" title="Delete">
+                  //       <IconButton
+                  //         color="error"
+                  //         // onClick={() => handleDeleteRow(row)}
+                  //       >
+                  //         <HiOutlineTrash/>
+                  //       </IconButton>
+                  //     </Tooltip>
+                  //   </Box>
+                  // )}
                   // renderTopToolbarCustomActions={() => (
                   //   <Button
                   //     // color="secondary"

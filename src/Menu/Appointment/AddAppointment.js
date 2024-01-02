@@ -66,6 +66,7 @@ import invoice from "../../Assets/invoice.png";
 import Swal from "sweetalert2";
 import addTmnt from "../../Assets/addtmt.png";
 import addColl from "../../Assets/addcoln.png";
+import moment from "moment";
 
 const drawerWidth = 240;
 
@@ -160,6 +161,10 @@ function AddAppointment(){
   let enquiryId=sessionStorage.getItem("bookEnqId");
   let Mobile=sessionStorage.getItem("bookmbl");
   let Name=sessionStorage.getItem("bookname");
+ let dob= sessionStorage.getItem("bookDOB");
+  let gender = sessionStorage.getItem("bookGender");
+
+  
   const [appointment, setAppointment] = useState({
     ClinicID:"",
     UserID:"",
@@ -168,9 +173,9 @@ function AddAppointment(){
     AppointmentDateTime:"",
     FirstName:Name.split(" ")[0],
     LastName:Name.split(" ")[1],
-    DateOfBirth:"",
+    DateOfBirth:dob,
     Age:"",
-    Gender:"",
+    Gender:gender,
     MobileNo:Mobile,
     TelephoneNo:"",
     Email:"",
@@ -500,7 +505,10 @@ fetch(drsUrl)
                     <ListItemButton
                       key={i}
                       onClick={() => {
-                         if (parent?.MenuName === "Menu") {
+                         if(parent?.MenuName === "Dashboard"){
+                         Role=="1"?navigate("/dashboard"):navigate("/dashboard2")
+                        }
+                         else if (parent?.MenuName === "Menu") {
                           handleMenuClick();
                         } else if (parent?.MenuName === "Leads/Patients") {
                           handleLpClick();
@@ -830,7 +838,7 @@ fetch(drsUrl)
                                 return (
                                   <>
                                      <ListItemButton sx={{ pl: 3 }} onClick={()=>{
-                                      if(rpt?.MenuName==="Enquiry To Patient Conversions"){
+                                     if(rpt?.MenuName==="Enquiry To Patient Conversions"){
                                         navigate("/e2p")
                                       }
                                       else if(rpt?.MenuName==="Patients Treatment"){
@@ -850,6 +858,18 @@ fetch(drsUrl)
                                       }
                                       else if(rpt?.MenuName==="Consultation Report"){
                                         navigate("/consult-rpt")
+                                      }
+                                      else if(rpt?.MenuName==="Invoice Report"){
+                                        navigate("/inv-rpt")
+                                      }
+                                      else if(rpt?.MenuName==="Collection Report"){
+                                        navigate("/clln-rpt")
+                                      }
+                                      else if(rpt?.MenuName==="Activity Report"){
+                                        navigate("/activity-rpt")
+                                      }
+                                      else if(rpt?.MenuName==="Appointment Cancellation Report"){
+                                        navigate("/cancelled-apmnt")
                                       }
                                     }}>
                                       <ListItemIcon>
@@ -991,7 +1011,7 @@ fetch(drsUrl)
                 <Col md={3}>
                     <Form.Group className="mb-3" controlId="formBasicEmail">
         <Form.Label>Date Of Birth</Form.Label>
-        <Form.Control type="date" placeholder="" name="DateOfBirth" onChange={(e)=>handleChange(e)}/>
+        <Form.Control type="date" placeholder="" name="DateOfBirth" value={moment((appointment?.DateOfBirth))?.format("YYYY-MM-DD")} onChange={(e)=>handleChange(e)}/>
    
       </Form.Group>                 
                 </Col>
@@ -1006,7 +1026,7 @@ fetch(drsUrl)
 <Col md={3}>
                 <Form.Group className="mb-3" controlId="formBasicEmail">
         <Form.Label>Gender <span className="req-t">*</span></Form.Label>
-        <Form.Select aria-label="Default select example" name="Gender" onChange={(e)=>handleChange(e)}>
+        <Form.Select aria-label="Default select example" name="Gender" value={appointment?.Gender} onChange={(e)=>handleChange(e)}>
       <option></option>
       <option value="Male">Male</option>
       <option value="Female">Female</option>

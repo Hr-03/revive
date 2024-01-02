@@ -68,6 +68,8 @@ import calendarap from "../../Assets/calendar.png";
 import invoice from "../../Assets/invoice.png";
 import addTmnt from "../../Assets/addtmt.png";
 import addColl from "../../Assets/addcoln.png";
+import { CSVLink, CSVDownload } from "react-csv";
+import { LiaDownloadSolid } from "react-icons/lia";
 const drawerWidth = 240;
 
 const Main = styled("main", { shouldForwardProp: (prop) => prop !== "open" })(
@@ -159,6 +161,19 @@ const StyledMenu = styled((props) => (
 }));
 
 function FollowUpEntries() {
+  const [datedata, setdatedata] = useState({
+    startDate:"",
+    endDate:""
+  })
+
+
+  const handleDates=(e)=>{
+    const newdata={...datedata};
+    newdata[e.target.name]=e.target.value;
+    setdatedata(newdata);
+    console.log(newdata);
+  }
+
   const navigate = useNavigate();
   const [createModalOpen, setCreateModalOpen] = useState(false);
 
@@ -212,6 +227,8 @@ function FollowUpEntries() {
             </>
           );
         },
+        filterFn: (row, id, filterValue) =>
+        row.getValue(id).startsWith(filterValue),
       },
       {
         accessorKey: "SourceType",
@@ -240,6 +257,8 @@ function FollowUpEntries() {
             </>
           );
         },
+        filterFn: (row, id, filterValue) =>
+        row.getValue(id).startsWith(filterValue),
       },
       // {
       //   accessorKey: "totalFollowUp’s",
@@ -248,7 +267,25 @@ function FollowUpEntries() {
       // },
       {
         accessorKey: "FollowUpStatus",
-        header: "Follow Up Status",
+        header: "Follow-Up Status",
+      },
+      {
+        accessorKey: "LastFollowUpDate",
+        header: "Last Follow-Up Date",
+        Cell: ({ cell }) => {
+          let fupdate = cell.getValue();
+          return (
+            <>
+              <div>{fupdate.split(" ")[0]}</div>
+            </>
+          );
+        },
+        filterFn: (row, id, filterValue) =>
+        row.getValue(id).startsWith(filterValue),
+      },
+      {
+        accessorKey: "Comments",
+        header: "Comments",
       },
       {
         accessorKey: "EnquiryType",
@@ -543,7 +580,10 @@ function FollowUpEntries() {
                     <ListItemButton
                       key={i}
                       onClick={() => {
-                         if (parent?.MenuName === "Menu") {
+                         if(parent?.MenuName === "Dashboard"){
+                         Role=="1"?navigate("/dashboard"):navigate("/dashboard2")
+                        }
+                         else if (parent?.MenuName === "Menu") {
                           handleMenuClick();
                         } else if (parent?.MenuName === "Leads/Patients") {
                           handleLpClick();
@@ -873,7 +913,7 @@ function FollowUpEntries() {
                                 return (
                                   <>
                                      <ListItemButton sx={{ pl: 3 }} onClick={()=>{
-                                      if(rpt?.MenuName==="Enquiry To Patient Conversions"){
+                                     if(rpt?.MenuName==="Enquiry To Patient Conversions"){
                                         navigate("/e2p")
                                       }
                                       else if(rpt?.MenuName==="Patients Treatment"){
@@ -893,6 +933,18 @@ function FollowUpEntries() {
                                       }
                                       else if(rpt?.MenuName==="Consultation Report"){
                                         navigate("/consult-rpt")
+                                      }
+                                      else if(rpt?.MenuName==="Invoice Report"){
+                                        navigate("/inv-rpt")
+                                      }
+                                      else if(rpt?.MenuName==="Collection Report"){
+                                        navigate("/clln-rpt")
+                                      }
+                                      else if(rpt?.MenuName==="Activity Report"){
+                                        navigate("/activity-rpt")
+                                      }
+                                      else if(rpt?.MenuName==="Appointment Cancellation Report"){
+                                        navigate("/cancelled-apmnt")
                                       }
                                     }}>
                                       <ListItemIcon>
@@ -960,6 +1012,39 @@ function FollowUpEntries() {
                 <p className="ap-t">Follow Up Entries</p>
                 <hr />
 
+                <Row className="mt-4">
+          <Col>
+          <span><b>Note : </b>Search by last followup date</span>
+          <div className='d-flex flex-wrap mt-3'>
+          <Form.Group className="mb-3" controlId="formBasicEmail">
+        <Form.Label>From date</Form.Label>
+        <Form.Control type="date" name="startDate" value={datedata?.startDate} placeholder="" onChange={handleDates} />
+      
+      </Form.Group>
+      <Form.Group className="mb-3 mx-3" controlId="formBasicEmail">
+        <Form.Label>To date</Form.Label>
+        <Form.Control type="date" name="endDate" value={datedata?.endDate} placeholder="" onChange={handleDates}/>
+      
+      </Form.Group>
+<div className='pt-3'>
+
+      <Button variant='' className='mx-3 rptBtn mt-4' onClick={(e)=>{
+        e.preventDefault();
+
+        const datefiltered=`https://reviveapplication.com/ReviveAPI/Revive.svc/GetFollowUpList/0/0/0/0/${datedata?.startDate}/${datedata?.endDate}/${User}/0`
+        fetch(datefiltered)
+        .then((res)=>res.json())
+        .then((geteRes)=>{
+          console.log(geteRes.Data);
+          setFupEntries(geteRes.Data)
+        })
+
+      }}>Search</Button>
+</div>
+          </div>
+          </Col>
+        </Row>
+
                 {/* <Row className="p-5">
                 <Col>
                 <p className="text-center hpathy-nodata mb-1">No Data available</p>
@@ -974,6 +1059,12 @@ function FollowUpEntries() {
                 </Col>
             </Row> */}
 
+<div className='d-flex justify-content-between m-2'>
+  <CSVLink data={fupentries} style={{textDecoration:"none",color:"white",backgroundColor:"green",borderRadius:"5px"}} className='p-2'><LiaDownloadSolid fontSize={25}/>Excel</CSVLink>
+  {/* <p className='text-end'><b>Total :</b>{Total}</p> */}
+</div>
+            
+
                 <MaterialReactTable
                   columns={columns}
                   data={fupentries}
@@ -982,7 +1073,10 @@ function FollowUpEntries() {
                   //   console.log(originalRow.EnquiryID);
                   // sessionStorage.setItem("enqid",originalRow.EnquiryID);
                   // }}
-                  enableRowNumbers="original"
+
+                  //for sr no.
+                  // -------------------
+                  // enableRowNumbers="original"      
                   muiTableHeadCellFilterTextFieldProps={{
                     sx: { m: "0.5rem 0", width: "100%" },
                     variant: "outlined",

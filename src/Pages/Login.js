@@ -66,7 +66,19 @@ function Login() {
     setLoading(false)
 
           console.log(resp);
-          if(resp.status===true){
+if(resp.status===true && resp?.Data[0]?.RoleID===1){
+  sessionStorage.setItem("RoleId",resp.Data[0]?.RoleID);
+  sessionStorage.setItem("UserId",resp.Data[0]?.UserID);
+  Swal.fire({
+    icon:"success",
+    title:"Logged in successfully!",
+    timer:2500,
+    showConfirmButton:false
+  
+  })
+  navigate("/dashboard");
+}
+          else if(resp.status===true && resp?.Data[0]?.RoleID!="1"){
             sessionStorage.setItem("RoleId",resp.Data[0]?.RoleID);
             sessionStorage.setItem("UserId",resp.Data[0]?.UserID);
             Swal.fire({
@@ -76,7 +88,7 @@ function Login() {
               showConfirmButton:false
             
             })
-            navigate("/branch");
+            navigate("/dashboard2");
           }
           else{
             Swal.fire({

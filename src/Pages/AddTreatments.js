@@ -179,9 +179,12 @@ const AddTreatments = () => {
       setAnchorEl(null);
     };
 
+    let UserId=sessionStorage.getItem("UserId");
+
+
     const [patients, setPatients] = useState([]);
 
-    const pUrl=`https://reviveapplication.com/ReviveAPI/Revive.svc/GetPatientList`;
+    const pUrl=`https://reviveapplication.com/ReviveAPI/Revive.svc/GetPatientList/${UserId}`;
     
     useEffect(()=>{
        fetch(pUrl)
@@ -214,6 +217,17 @@ const AddTreatments = () => {
 
     const addTUrl=`https://reviveapplication.com/ReviveAPI/Revive.svc/AddNewPatientTreatment`;
 
+
+    if(addTreatment?.PatientID==="" || addTreatment?.TreatmentID==="" || addTreatment?.TreatmentCost===""){
+      Swal.fire({
+        icon:"warning",
+        title:"Please fill all the fields marked with red *"
+      })
+    }
+    else{
+
+    
+
     fetch(addTUrl,{
       method:"POST",
           headers:{
@@ -233,6 +247,7 @@ const AddTreatments = () => {
         window.location.reload();
       }
     })
+  }
   }
 
 
@@ -637,7 +652,10 @@ useEffect(()=>{
                     <ListItemButton
                       key={i}
                       onClick={() => {
-                         if (parent?.MenuName === "Menu") {
+                         if(parent?.MenuName === "Dashboard"){
+                         Role=="1"?navigate("/dashboard"):navigate("/dashboard2")
+                        }
+                         else if (parent?.MenuName === "Menu") {
                           handleMenuClick();
                         } else if (parent?.MenuName === "Leads/Patients") {
                           handleLpClick();
@@ -967,7 +985,7 @@ useEffect(()=>{
                                 return (
                                   <>
                                      <ListItemButton sx={{ pl: 3 }} onClick={()=>{
-                                      if(rpt?.MenuName==="Enquiry To Patient Conversions"){
+                                     if(rpt?.MenuName==="Enquiry To Patient Conversions"){
                                         navigate("/e2p")
                                       }
                                       else if(rpt?.MenuName==="Patients Treatment"){
@@ -987,6 +1005,18 @@ useEffect(()=>{
                                       }
                                       else if(rpt?.MenuName==="Consultation Report"){
                                         navigate("/consult-rpt")
+                                      }
+                                      else if(rpt?.MenuName==="Invoice Report"){
+                                        navigate("/inv-rpt")
+                                      }
+                                      else if(rpt?.MenuName==="Collection Report"){
+                                        navigate("/clln-rpt")
+                                      }
+                                      else if(rpt?.MenuName==="Activity Report"){
+                                        navigate("/activity-rpt")
+                                      }
+                                      else if(rpt?.MenuName==="Appointment Cancellation Report"){
+                                        navigate("/cancelled-apmnt")
                                       }
                                     }}>
                                       <ListItemIcon>
@@ -1056,7 +1086,7 @@ useEffect(()=>{
             <Form>
                 <Row>
                 <Col md={4}>
-                <Form.Label>Patient name</Form.Label>
+                <Form.Label>Patient name <span className='req-t'>*</span></Form.Label>
 
                 <ReactSearchAutocomplete
       items={patients}
@@ -1075,7 +1105,7 @@ formatResult={formatResult}
                     </Col>
                     <Col md={4}>
                     <Form.Group>
-                        <Form.Label>Treatment name</Form.Label>
+                        <Form.Label>Treatment name <span className='req-t'>*</span></Form.Label>
                         <Form.Select aria-label="Default select example" className='' onChange={handleChange} name="TreatmentID"  style={{padding:"0.55rem"}}>
       <option></option>
       {
@@ -1093,7 +1123,7 @@ formatResult={formatResult}
                     </Col>
                     <Col md={4}>
                     <Form.Group>
-                        <Form.Label>Price</Form.Label>
+                        <Form.Label>Price <span className='req-t'>*</span></Form.Label>
                        <Form.Control type='number' name="TreatmentCost" onChange={handleChange} style={{padding:"0.55rem"}}/>
                     </Form.Group>
                     </Col>
