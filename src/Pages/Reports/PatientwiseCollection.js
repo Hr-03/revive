@@ -258,6 +258,16 @@ useEffect(()=>{
             //   return <div>{date.split(" ")[0]}</div>
             // }
           },
+          {
+            accessorKey: "PaymentDate",
+            header: "Payment Date",
+            Cell:({cell})=>{
+              let date=cell.getValue();
+              return <div>{date.split(" ")[0]}</div>
+            },
+            filterFn: (row, id, filterValue) =>
+            row.getValue(id).startsWith(filterValue),
+          },
          
       
         ],
@@ -904,7 +914,7 @@ useEffect(()=>{
       <Button variant='' className='mx-3 rptBtn mt-4' onClick={(e)=>{
         e.preventDefault();
 
-        const datefiltered=`https://reviveapplication.com/ReviveAPI/Revive.svc/GetPatientWiseCollectionReport/0/0/0/${datedata?.startDate}/${datedata?.endDate}`
+        const datefiltered=`https://reviveapplication.com/ReviveAPI/Revive.svc/GetPatientWiseCollectionReport/0/0/0/${datedata?.startDate}/${datedata?.endDate}/${User}`
         fetch(datefiltered)
         .then((res)=>res.json())
         .then((geteRes)=>{

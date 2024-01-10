@@ -1,3 +1,6 @@
+//This page was created by Hritik as per Client discussion and requirement.
+
+
 import React,{useState,useMemo,useEffect} from "react";
 import "../../Styles/Menu/Leads/AddEntry.css";
 import { styled, useTheme,alpha } from '@mui/material/styles';
@@ -65,6 +68,10 @@ import { MdLogout } from "react-icons/md";
 import invoice from "../../Assets/invoice.png";
 import addTmnt from "../../Assets/addtmt.png";
 import addColl from "../../Assets/addcoln.png";
+
+
+
+//material UI definition
 
 const drawerWidth = 240;
 
@@ -157,7 +164,7 @@ const StyledMenu = styled((props) => (
 
 
 
-
+//Component starts here
 
 function AddEntry(){
     const navigate=useNavigate();
@@ -240,6 +247,8 @@ function AddEntry(){
   });
 
 
+  // to check if field contains number
+
   function containsNumbers(str) {
     return /\d/.test(str);
   }
@@ -249,17 +258,7 @@ function AddEntry(){
   let firstn=containsNumbers(data.fn)
   let lastn=containsNumbers(data.ln)
 
-//   useEffect(()=>{
 
-// console.log(firstn);
-// console.log(lastn);
-
-//   },[data])
-
-
-//   const onchange=(e)=>{
-   
-//   }
 
 
 
@@ -388,6 +387,8 @@ const currentDate = new Date().toISOString().split('T')[0];
 const [selectedDate, setSelectedDate] = useState(currentDate);
 
 
+
+// handle onchange state of data
 
 const handle=(e)=>{
   const newcred={...data}

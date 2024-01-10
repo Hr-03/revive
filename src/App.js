@@ -63,6 +63,7 @@ import CollectionReport from './Pages/Reports/CollectionReport';
 import ActivityReport from './Pages/Reports/ActivityReport';
 import Dashboard2 from './Pages/Dashboard2';
 import CancelledAppointments from './Pages/Reports/CancelledAppointments';
+import PendingFollowups from './Pages/Reports/PendingFollowups';
 
 
 function App() {
@@ -130,6 +131,7 @@ function App() {
           <Route path="/activity-rpt" element={<ActivityReport/>} />
           <Route path="/dashboard2" element={<Dashboard2/>} />
           <Route path="/cancelled-apmnt" element={<CancelledAppointments/>} />
+          <Route path="/pending-fups" element={<PendingFollowups/>} />
      
 
 

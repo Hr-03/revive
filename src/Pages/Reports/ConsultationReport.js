@@ -909,7 +909,7 @@ useEffect(()=>{
       <Button variant='' className='mx-3 rptBtn mt-4' onClick={(e)=>{
         e.preventDefault();
 
-        const datefiltered=`https://reviveapplication.com/ReviveAPI/Revive.svc/GetConsultationReport/${datedata?.startDate}/${datedata?.endDate}`
+        const datefiltered=`https://reviveapplication.com/ReviveAPI/Revive.svc/GetConsultationReport/${datedata?.startDate}/${datedata?.endDate}/${User}`
         fetch(datefiltered)
         .then((res)=>res.json())
         .then((geteRes)=>{

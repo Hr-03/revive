@@ -160,196 +160,199 @@ const StyledMenu = styled((props) => (
   },
 }));
 
-function ClinicwiseCollection() {
-  let Role=sessionStorage.getItem("RoleId");
 
-  const [datedata, setdatedata] = useState({
-    startDate:"",
-    endDate:""
-  })
+function PendingFollowups() {
+    let Role=sessionStorage.getItem("RoleId");
 
-
-  const handleDates=(e)=>{
-    const newdata={...datedata};
-    newdata[e.target.name]=e.target.value;
-    setdatedata(newdata);
-    console.log(newdata);
-  }
-
-
-    const navigate=useNavigate();
-    const [createModalOpen, setCreateModalOpen] = useState(false);
-
-    const theme = useTheme();
-    const [open, setOpen] = React.useState(false);
+    const [datedata, setdatedata] = useState({
+      startDate:"",
+      endDate:""
+    })
   
-    const handleDrawerOpen = () => {
-      setOpen(true);
-    };
   
-    const handleDrawerClose = () => {
-      setOpen(false);
-    };
-    const [anchorEl, setAnchorEl] = React.useState(null);
-    const op = Boolean(anchorEl);
-    const handleClick = (event) => {
-      setAnchorEl(event.currentTarget);
-    };
-    const handleClose = () => {
-      setAnchorEl(null);
-    };
-
-    // let Role=sessionStorage.getItem("RoleId");
-
-    let User=Role=="1"?0:Role=="11"?0:sessionStorage.getItem("UserId")
-
-  const [clinicColl, setClinicColl] = useState([]);
-
-  const getCollUrl=`https://reviveapplication.com/ReviveAPI/Revive.svc/GetClinicWiseCollectionReport/0/0/0/${User}`;
-useEffect(()=>{
-  fetch(getCollUrl)
-  .then((res)=>res.json())
-  .then((geteRes)=>{
-    console.log(geteRes.Data);
-    setClinicColl(geteRes.Data)
-  })
-},[])
-
-
-    const columns = useMemo(
-        () => [
-          // {
-          //   accessorKey: "UserID",
-          //   header: "User ID",
-          //   muiTableHeadCellFilterTextFieldProps: { placeholder: "User ID" },
-            
-          // },
-          {
-            accessorKey: "ClinicName",
-            header: "Clinic Name",
-            // Cell:({cell})=>{
-            //   let imurl=cell.getValue();
-
-            //   return <div>{<img src={imurl?imurl:"https://swargworld.com/wp-content/uploads/2017/01/No_image_available.jpg"} width={150} height={150}/>}</div>
-            // }
-          },
-          {
-            accessorKey: "GrandTotal",
-            header: "Grand Total",
-          },
-          {
-            accessorKey: "PaidAmount",
-            header: "Paid Amount",
-          },
-         
-          {
-            accessorKey: "PendingAmount",
-            header: "Pending Amount",
-            // Cell:({cell})=>{
-            //   let date=cell.getValue();
-            //   return <div>{date.split(" ")[0]}</div>
-            // }
-          },
-         
-      
-        ],
-        []
-      );
+    const handleDates=(e)=>{
+      const newdata={...datedata};
+      newdata[e.target.name]=e.target.value;
+      setdatedata(newdata);
+      console.log(newdata);
+    }
+  
+  
+      const navigate=useNavigate();
+      const [createModalOpen, setCreateModalOpen] = useState(false);
+  
+      const theme = useTheme();
+      const [open, setOpen] = React.useState(false);
     
-     
-
-      const [parentMenu, setparentMenu] = useState([]);
-
-  const [mainMenu, setmainMenu] = useState([]);
-
-  const [clinicSetting, setclinicSetting] = useState([]);
-
-  const [treatmentMenu, settreatmentMenu] = useState([]);
-
-  const [userSetting, setuserSetting] = useState([]);
-
-  const [lpMenu, setlpMenu] = useState([]);
-
-  const [apmntMenu, setapmntMenu] = useState([]);
-
-  const [reportMenu, setreportMenu] = useState([]);
-
-  const [menuList, setMenuList] = useState([]);
-
-  const menuUrl = `https://reviveapplication.com/ReviveAPI/Revive.svc/GetMenuAccess/${Role}`;
-  useEffect(() => {
-    fetch(menuUrl)
-      .then((res) => res.json())
-      .then((list) => {
-        console.log(list.Data);
-        setMenuList(list.Data);
-
-        setparentMenu(list.Data.filter((parent, i) => parent.Parent === 0));
-        // console.log(list.Data.filter((parent,i)=>parent.Parent===0));
-
-        setmainMenu(list.Data.filter((main, i) => main.Parent === 3));
-        // console.log(list.Data.filter((main,i)=>main.Parent===3));
-
-        setlpMenu(list.Data.filter((lp, i) => lp.Parent === 6));
-        // console.log(list.Data.filter((lp,i)=>lp.Parent===6));
-
-        setreportMenu(list.Data.filter((rpt, i) => rpt.Parent === 8));
-        // console.log(list.Data.filter((rpt,i)=>rpt.Parent===8));
-
-        setclinicSetting(list.Data.filter((cs, i) => cs.Parent === 4));
-        // console.log(list.Data.filter((cs,i)=>cs.Parent===4);
-
-        setuserSetting(list.Data.filter((user, i) => user.Parent === 5));
-        // console.log(list.Data.filter(((user,i)=>user.Parent===5)));
-
-        settreatmentMenu(list.Data.filter((treat, i) => treat.Parent === 9));
-        // console.log(list.Data.filter((treat,i)=>treat.Parent===9));
-
-        setapmntMenu(list.Data.filter((apmnt, i) => apmnt.Parent === 7));
-        // console.log(list.Data.filter((apmnt,i)=>apmnt.Parent===7));
-      });
-  }, []);
-
-
-  const [open1, setOpen1] = React.useState(false);
-
-  const handleMenuClick = () => {
-    setOpen1(!open1);
-  };
-  const [open2, setOpen2] = React.useState(false);
-
-  const handleCsClick = () => {
-    setOpen2(!open2);
-  };
+      const handleDrawerOpen = () => {
+        setOpen(true);
+      };
+    
+      const handleDrawerClose = () => {
+        setOpen(false);
+      };
+      const [anchorEl, setAnchorEl] = React.useState(null);
+      const op = Boolean(anchorEl);
+      const handleClick = (event) => {
+        setAnchorEl(event.currentTarget);
+      };
+      const handleClose = () => {
+        setAnchorEl(null);
+      };
   
-  const [open3, setOpen3] = React.useState(false);
+      // let Role=sessionStorage.getItem("RoleId");
+  
+      let User=Role=="1"?0:Role=="11"?0:sessionStorage.getItem("UserId")
+  
+    // const [clinicColl, setClinicColl] = useState([]);
 
-  const handleTreatClick = () => {
-    setOpen3(!open3);
-  };
-  const [open4, setOpen4] = React.useState(false);
-
-  const handleUserClick = () => {
-    setOpen4(!open4);
-  };
-  const [open5, setOpen5] = React.useState(false);
-
-  const handleLpClick = () => {
-    setOpen5(!open5);
-  };
-  const [open6, setOpen6] = React.useState(false);
-
-  const handleApClick = () => {
-    setOpen6(!open6);
-  };
-  const [open7, setOpen7] = React.useState(false);
-
-  const handleReportClick = () => {
-    setOpen7(!open7);
-  };
+    const [pendingfups, setpendingfups] = useState([])
+  
+    const getCollUrl=`https://reviveapplication.com/ReviveAPI/Revive.svc/GetPendingFollowups/${User}/0/0`;
+  useEffect(()=>{
+    fetch(getCollUrl)
+    .then((res)=>res.json())
+    .then((geteRes)=>{
+      console.log(geteRes.PendingFollowupsList);
+    //   setClinicColl(geteRes.Data)
+    setpendingfups(geteRes.PendingFollowupsList)
+    })
+  },[])
+  
+  
+      const columns = useMemo(
+          () => [
+            // {
+            //   accessorKey: "UserID",
+            //   header: "User ID",
+            //   muiTableHeadCellFilterTextFieldProps: { placeholder: "User ID" },
+              
+            // },
+            {
+              accessorKey: "ClinicName",
+              header: "Clinic Name",
+              // Cell:({cell})=>{
+              //   let imurl=cell.getValue();
+  
+              //   return <div>{<img src={imurl?imurl:"https://swargworld.com/wp-content/uploads/2017/01/No_image_available.jpg"} width={150} height={150}/>}</div>
+              // }
+            },
+            {
+              accessorKey: "Name",
+              header: "Name",
+            },
+            {
+              accessorKey: "Date",
+              header: "Date",
+                Cell:({cell})=>{
+                let date=cell.getValue();
+                return <div>{date.split(" ")[0]}</div>
+              },
+              filterFn: (row, id, filterValue) =>
+              row.getValue(id).startsWith(filterValue),
+            },
+           
+           
+           
+        
+          ],
+          []
+        );
+      
+       
+  
+        const [parentMenu, setparentMenu] = useState([]);
+  
+    const [mainMenu, setmainMenu] = useState([]);
+  
+    const [clinicSetting, setclinicSetting] = useState([]);
+  
+    const [treatmentMenu, settreatmentMenu] = useState([]);
+  
+    const [userSetting, setuserSetting] = useState([]);
+  
+    const [lpMenu, setlpMenu] = useState([]);
+  
+    const [apmntMenu, setapmntMenu] = useState([]);
+  
+    const [reportMenu, setreportMenu] = useState([]);
+  
+    const [menuList, setMenuList] = useState([]);
+  
+    const menuUrl = `https://reviveapplication.com/ReviveAPI/Revive.svc/GetMenuAccess/${Role}`;
+    useEffect(() => {
+      fetch(menuUrl)
+        .then((res) => res.json())
+        .then((list) => {
+          console.log(list.Data);
+          setMenuList(list.Data);
+  
+          setparentMenu(list.Data.filter((parent, i) => parent.Parent === 0));
+          // console.log(list.Data.filter((parent,i)=>parent.Parent===0));
+  
+          setmainMenu(list.Data.filter((main, i) => main.Parent === 3));
+          // console.log(list.Data.filter((main,i)=>main.Parent===3));
+  
+          setlpMenu(list.Data.filter((lp, i) => lp.Parent === 6));
+          // console.log(list.Data.filter((lp,i)=>lp.Parent===6));
+  
+          setreportMenu(list.Data.filter((rpt, i) => rpt.Parent === 8));
+          // console.log(list.Data.filter((rpt,i)=>rpt.Parent===8));
+  
+          setclinicSetting(list.Data.filter((cs, i) => cs.Parent === 4));
+          // console.log(list.Data.filter((cs,i)=>cs.Parent===4);
+  
+          setuserSetting(list.Data.filter((user, i) => user.Parent === 5));
+          // console.log(list.Data.filter(((user,i)=>user.Parent===5)));
+  
+          settreatmentMenu(list.Data.filter((treat, i) => treat.Parent === 9));
+          // console.log(list.Data.filter((treat,i)=>treat.Parent===9));
+  
+          setapmntMenu(list.Data.filter((apmnt, i) => apmnt.Parent === 7));
+          // console.log(list.Data.filter((apmnt,i)=>apmnt.Parent===7));
+        });
+    }, []);
+  
+  
+    const [open1, setOpen1] = React.useState(false);
+  
+    const handleMenuClick = () => {
+      setOpen1(!open1);
+    };
+    const [open2, setOpen2] = React.useState(false);
+  
+    const handleCsClick = () => {
+      setOpen2(!open2);
+    };
+    
+    const [open3, setOpen3] = React.useState(false);
+  
+    const handleTreatClick = () => {
+      setOpen3(!open3);
+    };
+    const [open4, setOpen4] = React.useState(false);
+  
+    const handleUserClick = () => {
+      setOpen4(!open4);
+    };
+    const [open5, setOpen5] = React.useState(false);
+  
+    const handleLpClick = () => {
+      setOpen5(!open5);
+    };
+    const [open6, setOpen6] = React.useState(false);
+  
+    const handleApClick = () => {
+      setOpen6(!open6);
+    };
+    const [open7, setOpen7] = React.useState(false);
+  
+    const handleReportClick = () => {
+      setOpen7(!open7);
+    };
   return (
-  <>
-   <Box sx={{ display: 'flex' }}>
+    <>
+      <Box sx={{ display: 'flex' }}>
       <CssBaseline />
       <AppBar position="fixed" open={open} className="navigBar">
           <Toolbar>
@@ -876,7 +879,7 @@ useEffect(()=>{
        <Card className="m-1 mt-3 emp-crd p-3">
         <Row>
             <Col>
-            <p className="ap-t">Clinicwise Collection</p>
+            <p className="ap-t">Pending Follow-ups</p>
             <hr />
 
         <Row className="mt-4">
@@ -897,12 +900,12 @@ useEffect(()=>{
       <Button variant='' className='mx-3 rptBtn mt-4' onClick={(e)=>{
         e.preventDefault();
 
-        const datefiltered=`https://reviveapplication.com/ReviveAPI/Revive.svc/GetClinicWiseCollectionReport/0/${datedata?.startDate}/${datedata?.endDate}/${User}`
+        const datefiltered=`https://reviveapplication.com/ReviveAPI/Revive.svc/GetPendingFollowups/${User}/${datedata?.startDate}/${datedata?.endDate}`
         fetch(datefiltered)
         .then((res)=>res.json())
         .then((geteRes)=>{
-          console.log(geteRes.Data);
-          setClinicColl(geteRes.Data)
+          console.log(geteRes.PendingFollowupsLis);
+          setpendingfups(geteRes.PendingFollowupsLis)
         })
 
       }}>Search</Button>
@@ -925,13 +928,13 @@ useEffect(()=>{
             </Row> */}
 
 <div className='d-flex justify-content-between m-2'>
-  <CSVLink data={clinicColl} style={{textDecoration:"none",color:"white",backgroundColor:"green",borderRadius:"5px"}} className='p-2'><LiaDownloadSolid fontSize={25}/>Excel</CSVLink>
-  {/* <p className='text-end'><b>Total :</b>{Total}</p> */}
+  <CSVLink data={pendingfups} style={{textDecoration:"none",color:"white",backgroundColor:"green",borderRadius:"5px"}} className='p-2'><LiaDownloadSolid fontSize={25}/>Excel</CSVLink>
 </div>
+  {/* <p className='text-end'><b>Total :</b>{Total}</p> */}
 
             <MaterialReactTable
                   columns={columns}
-                  data={clinicColl}
+                  data={pendingfups}
                   initialState={{ showColumnFilters: true }} //show filters by default
                   
                   muiTableHeadCellFilterTextFieldProps={{
@@ -979,8 +982,8 @@ useEffect(()=>{
        </Card>
       </Main>
     </Box>
-  </>
+    </>
   )
 }
 
-export default ClinicwiseCollection
+export default PendingFollowups

@@ -72,6 +72,7 @@ import addColl from "../Assets/addcoln.png";
 
 import tapmt from "../Assets/tdyapmt.svg";
 import fups from "../Assets/flups.svg";
+import pendingf from "../Assets/pendingfups.svg";
 
 import invoice from "../Assets/invoice.png";
 import { PieChart, pieArcLabelClasses } from '@mui/x-charts/PieChart';
@@ -499,6 +500,9 @@ function Dashboard2() {
     const [tapmnt, settapmnt] = useState([])
   
     const [tfups, settfups] = useState([])
+
+  const [pendingfups, setpendingfups] = useState([])
+
     
   const [data, setdata] = useState([]);
   
@@ -522,6 +526,9 @@ function Dashboard2() {
   setdata(result.DLeadsSourceDatas)
   
   setpnt(result.DTreatmentCategoryDatas)
+
+setpendingfups(result.ActivityPendingFollowup)
+
   
   setclnc(result.DClinicDatas)
         settapmnt(result?.ActivityAppointments);
@@ -593,6 +600,48 @@ function Dashboard2() {
   
   
     const columns3 = useMemo(
+      () => [
+        // {
+        //   accessorKey: "UserID",
+        //   header: "User ID",
+        //   muiTableHeadCellFilterTextFieldProps: { placeholder: "User ID" },
+          
+        // },
+        {
+          accessorKey: "ClinicName",
+          header: "Clinic Name",
+          // Cell:({cell})=>{
+          //   let imurl=cell.getValue();
+  
+          //   return <div>{<img src={imurl?imurl:"https://swargworld.com/wp-content/uploads/2017/01/No_image_available.jpg"} width={150} height={150}/>}</div>
+          // }
+        },
+        {
+          accessorKey: "Name",
+          header: "Name",
+        },
+  
+       
+  
+        {
+          accessorKey: "Date",
+          header: "Date",
+          Cell:({cell})=>{
+            let date=cell.getValue();
+            return <div>{date.split(" ")[0]}</div>
+          },
+          filterFn: (row, id, filterValue) =>
+      row.getValue(id).startsWith(filterValue),
+        },
+  
+       
+    
+      ],
+      []
+    );
+
+
+    const columns4 = useMemo(
       () => [
         // {
         //   accessorKey: "UserID",
@@ -1306,7 +1355,7 @@ setclnc(geteRes.DClinicDatas)
           <Col>
 <p style={{fontSize:"22px",fontWeight:"500"}}>Reports</p>
           <Row>
-            <Col md={3}>
+            <Col>
             <Card className="p-3 me-0 me-md-5">
               <Row>
                 <Col>
@@ -1332,7 +1381,7 @@ setclnc(geteRes.DClinicDatas)
               </Row>
             </Card>
             </Col>
-            <Col md={3}>
+            <Col>
             <Card className="p-3 me-0 me-md-5">
               <Row>
                 <Col>
@@ -1358,7 +1407,7 @@ setclnc(geteRes.DClinicDatas)
               </Row>
             </Card>
             </Col>
-            <Col md={3}>
+            <Col>
             <Card className="p-3 me-0 me-md-5">
               <Row>
                 <Col>
@@ -1384,7 +1433,7 @@ setclnc(geteRes.DClinicDatas)
               </Row>
             </Card>
             </Col>
-            <Col md={3}>
+            <Col>
             <Card className="p-3 me-0 me-md-5">
               <Row>
                 <Col>
@@ -1403,6 +1452,32 @@ setclnc(geteRes.DClinicDatas)
                 <p style={{fontWeight:"500",color:"#946DB7",fontSize:"16px"}} className='m-0 pt-1 pb-1'>Consultation Report</p>
                 <Button variant="" className='p-0' onClick={()=>{
                   navigate("/consult-rpt")
+                }}>view  <span className="mx-2"><CgArrowLongRight/></span></Button>
+                
+                </Col>
+                
+              </Row>
+            </Card>
+            </Col>
+            <Col>
+            <Card className="p-3 me-0 me-md-5">
+              <Row>
+                <Col>
+
+                  {/* <Row>
+                    <Col md={4}>
+                    
+                <Card style={{borderColor:"#00AE3B"}}>
+                  <img src={branches} alt="" srcset="" width={50} height={50} className="m-auto mt-2 mb-2"/>
+                </Card>
+                    </Col>
+                    <Col md={8}>
+                    <p className='mx-3' style={{fontSize:"32px",color:"#00AE3B",fontWeight:"500"}}>{stats?.TotalBranch}</p>
+                    </Col>
+                  </Row> */}
+                <p style={{fontWeight:"500",color:"red",fontSize:"16px"}} className='m-0 pt-1 pb-1'>Pending Follow-ups</p>
+                <Button variant="" className='p-0' onClick={()=>{
+                  navigate("/pending-fups")
                 }}>view  <span className="mx-2"><CgArrowLongRight/></span></Button>
                 
                 </Col>
@@ -1569,6 +1644,81 @@ setclnc(geteRes.DClinicDatas)
                 />
                 </div>
           </Card>
+          </Col>
+        </Row>
+
+
+
+        <Row className='mt-3'>
+          <Col md={6}>
+          <Card className='p-3'>
+            <div className="d-flex">
+
+            <Card style={{borderColor:"red"}} className='p-2'>
+              <img src={pendingf} alt="" className='m-auto' srcset="" width={50} height={50}/>
+            </Card>
+            <div className=' mt-2 mx-2'>
+              <p style={{fontSize:"18px",fontWeight:"600"}} className='m-0'>Pending Follow Up’s</p>
+              <p style={{fontSize:"24px",fontWeight:"500",color:"red"}} className='m-0'>{stats?.PendingFollowup}</p>
+                        </div>
+            </div>
+          <div className='mt-2'>
+            <MaterialReactTable
+                    columns={columns4}
+                    data={pendingfups}
+                    initialState={{ showColumnFilters: true }} //show filters by default
+            
+                    muiTableHeadCellFilterTextFieldProps={{
+                      sx: { m: "0.5rem 0", width: "100%" },
+                      variant: "outlined",
+                    }}
+                    // enableEditing
+                    // onEditingRowSave={handleSaveRowEdits}
+                    // onEditingRowCancel={handleCancelRowEdits}
+                    // renderRowActions={({ cell,row, table }) => (
+                    //   <Box sx={{ display: "flex", gap: "1rem" }}>
+                    //     <Tooltip arrow placement="left" title="View">
+                    //       <IconButton
+                    //       className="view-btn"
+                    //       onClick={() => {
+                    //           let invNo=cell.row.original.InvoiceNo;
+                    //           let enqId=cell.row.original.ID;
+                    //           sessionStorage.setItem("consultInvNo",invNo);
+                    //           sessionStorage.setItem("consultEnqId",enqId)
+                    //           navigate("/consult-view-inv")
+                    //       }}
+            
+                    //       >
+                    //         <AiOutlineEye/>
+                    //       </IconButton>
+                    //     </Tooltip>
+                    //     <Tooltip arrow placement="right" title="Delete">
+                    //       <IconButton
+                    //         color="error"
+                    //         className="delete-btn"
+                    //         onClick={(e) => {
+                    //                setdelData((pre)=>{
+                    //                   return{
+                    //                       ...pre,
+                    //                      InvoiceTid:cell.row.original.InvoiceTid
+                    //                   }
+                    //               })
+                    //               console.log(cell.row.original.InvoiceTid);
+                    //               handleShow();
+                    //         }}
+            
+                    //       >
+                    //         <HiOutlineTrash/>
+                    //       </IconButton>
+                    //     </Tooltip>
+                    //   </Box>
+                    // )}
+            
+                    positionActionsColumn="last"
+            
+                  />
+          </div>
+                     </Card>
           </Col>
         </Row>
 

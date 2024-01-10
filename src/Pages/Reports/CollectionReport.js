@@ -1032,7 +1032,7 @@ fetch(drUrl)
       <Button variant='' className='mx-3 rptBtn mt-4' onClick={(e)=>{
         e.preventDefault();
 
-        const datefiltered=`https://reviveapplication.com/ReviveAPI/Revive.svc/GetPaymentMwiseCollection/${datedata?.startDate?datedata?.startDate:0}/${datedata?.endDate?datedata?.endDate:0}/${datedata?.branch?datedata?.branch:0}/${datedata?.doctor?datedata?.doctor:0}/${datedata?.payment?datedata?.payment:0}`
+        const datefiltered=`https://reviveapplication.com/ReviveAPI/Revive.svc/GetPaymentMwiseCollection/${datedata?.startDate?datedata?.startDate:0}/${datedata?.endDate?datedata?.endDate:0}/${datedata?.branch?datedata?.branch:0}/${datedata?.doctor?datedata?.doctor:0}/${datedata?.payment?datedata?.payment:0}/${User}`
         fetch(datefiltered)
         .then((res)=>res.json())
         .then((geteRes)=>{
