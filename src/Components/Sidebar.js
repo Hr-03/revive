@@ -55,6 +55,8 @@ import calendarap from "../Assets/calendar.png";
 import addTmnt from "../Assets/addtmt.png";
 import addColl from "../Assets/addcoln.png";
 import { useNavigate } from "react-router-dom";
+import { MdLogout } from "react-icons/md";
+
 
 const drawerWidth = 240;
 
@@ -146,7 +148,7 @@ const StyledMenu = styled((props) => (
   },
 }));
 
-function Sidebar() {
+function Sidebar({ children }) {
   const theme = useTheme();
   const [open, setOpen] = React.useState(false);
   const navigate = useNavigate();
@@ -258,9 +260,9 @@ function Sidebar() {
   };
   return (
     <>
-      <Box sx={{ display: "flex" }}>
-        <CssBaseline />
-        <AppBar position="fixed" open={open} className="navigBar">
+     <Box sx={{ display: 'flex' }}>
+      <CssBaseline />
+      <AppBar position="fixed" open={open} className="navigBar">
           <Toolbar>
             <IconButton
               color="inherit"
@@ -272,11 +274,13 @@ function Sidebar() {
             >
               <MenuIcon />
             </IconButton>
-
+           
             <IconButton
               color="inherit"
               aria-label="open drawer"
+            
               className="helpbtn me-2"
+              
             >
               <HelpOutlineOutlined />
             </IconButton>
@@ -287,7 +291,9 @@ function Sidebar() {
             <IconButton
               color="inherit"
               aria-label="open drawer"
+             
               className="sbarbtn me-3"
+              
             >
               <NotificationsNoneOutlined />
             </IconButton>
@@ -296,6 +302,7 @@ function Sidebar() {
               aria-controls={op ? "demo-customized-menu" : undefined}
               aria-haspopup="true"
               aria-expanded={op ? "true" : undefined}
+           
               disableElevation
               onClick={handleClick}
               endIcon={<KeyboardArrowDownIcon className="profIcon" />}
@@ -312,15 +319,12 @@ function Sidebar() {
               open={op}
               onClose={handleClose}
             >
-              <MenuItem
-                onClick={() => {
-                  navigate("/");
-                }}
-                disableRipple
-              >
-                <EditIcon />
-                Logout
-              </MenuItem>
+                <MenuItem onClick={()=>{
+          navigate("/")
+        }} disableRipple>
+          <MdLogout/>
+          Logout
+        </MenuItem>
             </StyledMenu>
           </Toolbar>
         </AppBar>
@@ -339,14 +343,13 @@ function Sidebar() {
           open={open}
         >
           <DrawerHeader>
-            <img src={logo} alt="" srcset="" className="logoimg mt-4 mb-4" />
+            <img src={logo} alt="" srcset="" className="logoimg mt-2 mb-2" />
             <IconButton onClick={handleDrawerClose} className="closeBtn">
+             
               <CloseIcon />
             </IconButton>
           </DrawerHeader>
           <Divider />
-
-          {/* ---------------------------New */}
           <List>
             <>
               {parentMenu?.map((parent, i) => {
@@ -403,8 +406,6 @@ function Sidebar() {
                               : parent?.MenuName === "Consultation Invoice"
                               ? invoice
                               :""
-                          }`}
-                        />
                           }`}
                         />
                       </ListItemIcon>
@@ -767,8 +768,25 @@ function Sidebar() {
               })}
             </>
           </List>
+          {/* <Divider />
+          <List>
+            {["All mail", "Trash", "Spam"].map((text, index) => (
+              <ListItem key={text} disablePadding>
+                <ListItemButton>
+                  <ListItemIcon>
+                    {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
+                  </ListItemIcon>
+                  <ListItemText primary={text} />
+                </ListItemButton>
+              </ListItem>
+            ))}
+          </List> */}
         </Drawer>
-      </Box>
+      <Main open={open}>
+        <DrawerHeader />
+      {children}
+      </Main>
+    </Box>
     </>
   );
 }
