@@ -1,0 +1,106 @@
+.branch-title{
+    font-size: 24px;
+    color: #CC758E;
+    font-weight: 500 !important;
+}
+
+.b-crd{
+    box-shadow: 0px 1px 8px #FFBED1;
+}
+.css-vv34gr-MuiTableRow-root{
+    background-color: #EBD4FF !important;
+}
+
+th{
+    border-right: 4px solid white !important;
+  font-family: 'Poppins', sans-serif !important;
+font-weight: 500 !important;
+}
+
+th:last-child{
+    border-right: none !important;
+  font-family: 'Poppins', sans-serif !important;
+
+}
+
+td{
+    border-right: 2px solid #EBD4FF;
+  font-family: 'Poppins', sans-serif !important;
+    
+}
+
+.add-btn{
+    background-color: #825AA5 !important;
+    text-transform: capitalize !important;
+  font-family: 'Poppins', sans-serif !important;
+
+  font-weight: 500;
+}
+
+.edit-btn{
+    color: #825AA5 !important;
+}
+
+
+.css-h4y409-MuiList-root::-webkit-scrollbar {
+  width: 8px !important;
+}
+
+.css-epvm6{
+  overflow: hidden !important;
+}
+
+.css-h4y409-MuiList-root{
+  background-color: #9B7BB7 !important;
+}
+.css-1l8j5k8{
+  background-color: #9B7BB7 !important;
+
+}
+.css-y34huh{
+  background-color: #EBD4FF  !important;
+  
+}
+
+.css-1ontqvh{
+  background-color: #9B7BB7  !important;
+
+}
+
+.css-1k455el{
+  overflow: hidden !important;
+}
+
+.css-yb0lig,.css-1uwabd6,.css-vcl3iz,.css-wqyty6{
+  color: white !important;
+}
+
+.css-1ontqvh::-webkit-scrollbar{
+  width: 1px !important;
+}
+
+/* .css-vubbuv{
+  color: #9B7BB7 !important;
+} */
+
+.css-i6s8oy{
+  min-height: 5.4em !important;
+}
+
+/* .css-1yxmbwk,.css-pio6kb,.css-1k455el{
+  color: #9B7BB7 !important;
+} */
+
+.css-1yw493q,.css-epvm6{
+  color: black !important;
+}
+
+@media screen and (max-width:768px) {
+  .add-btn{
+    font-size: 8px !important;
+  }
+
+  .branch-title{
+    font-size: 20px;
+  }
+}

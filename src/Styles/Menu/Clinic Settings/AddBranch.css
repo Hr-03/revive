@@ -1,0 +1,39 @@
+.addb-crd{
+    box-shadow: 0px 1px 8px #FFBED1;
+}
+
+.addb-t{
+    font-size: 24px;
+    color: #CC758E;
+    font-weight: 500 !important;
+}
+
+.form-label{
+    color: #825AA5;
+}
+
+
+.addb-sub-btn{
+    float: right !important;
+    background-color: #825AA5 !important;
+    color: white !important;
+    text-transform: capitalize !important;
+}
+
+.addb-sub-btn:hover{
+    background-color: #825AA5 !important;
+
+}
+
+.addb-res-btn{
+    text-transform: capitalize !important;
+    border:1px solid #FF719B !important;
+    color: #FF719B !important;
+}
+
+
+@media screen and (max-width:768px) {
+    .addb-t{
+        font-size: 20px;
+    }
+}

@@ -1,0 +1,64 @@
+.lCount{
+    font-size: 18px;;
+    font-weight: 500;
+}
+
+
+.lTitle1{
+    font-size: 16px;
+    font-weight: 500;
+    color: #946DB7;
+}
+
+.lTitle2{
+    font-size: 16px;
+    font-weight: 500;
+    color: #FF5084;
+}
+
+.lTitle3{
+    font-size: 16px;
+    font-weight: 500;
+    color: #00AE3B;
+}
+
+.lTitle4{
+    font-size: 16px;
+    font-weight: 500;
+    color: #FF2727;
+}
+
+.countL1{
+    font-size: 32px;
+    font-weight: 500;
+    color: #946DB7;
+
+}
+.countL2{
+    font-size: 32px;
+    font-weight: 500;
+    color: #FF5084;
+
+
+}
+.countL3{
+    font-size: 32px;
+    font-weight: 500;
+    color: #00AE3B;
+}
+
+.countL4{
+    font-size: 32px;
+    font-weight: 500;
+    color: #FF2727;
+}
+
+.userGreet{
+    font-size: 20px;
+    font-weight: 500;
+}
+
+.graphHead{
+    font-size: 18px;
+    font-weight: 600;
+}

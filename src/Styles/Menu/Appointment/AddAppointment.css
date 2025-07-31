@@ -1,0 +1,17 @@
+.af-crd{
+    box-shadow: 0px 1px 8px #FFBED1;
+
+}
+
+.af-t{
+    font-size: 24px;
+    color: #CC758E;
+    font-weight: 500 !important;
+}
+
+.sub-btn{
+    color: white !important;
+background-color: #825AA5 !important;
+text-transform: capitalize !important;
+float: right !important;
+}

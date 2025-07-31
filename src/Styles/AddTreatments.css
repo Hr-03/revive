@@ -1,0 +1,49 @@
+.subTmt{
+    background-color: #825AA5 !important;
+    color: white !important;
+}
+.jiMOeR {
+    height: 150px !important;
+    /* overflow: hidden !important; */
+    z-index: 4 !important;
+}
+.eUeawN {
+    height: 150px !important;
+    /* overflow: hidden !important; */
+    z-index: 4 !important;
+}
+
+
+.jiMOeR::-webkit-scrollbar{
+    width: 5px !important;
+}
+
+
+.jiMOeR .wrapper {
+
+    border-radius: 5px !important;
+    border-color: rgba(173, 173, 171, 0.534) !important;
+   
+}
+
+.eUeawN .wrapper {
+
+    border-radius: 5px !important;
+    border-color: rgba(173, 173, 171, 0.534) !important;
+   
+}
+
+.eUeawN::-webkit-scrollbar{
+    width: 5px !important;
+
+}
+
+
+.jVORrT,.kXmFEq {
+   
+    display: none !important;
+}
+.lmJnep {
+   
+    display: none !important;
+}

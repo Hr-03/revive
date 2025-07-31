@@ -1,0 +1,30 @@
+.wl-crd{
+    box-shadow: 0px 1px 8px #FFBED1;
+
+}
+
+.wl-t{
+    font-size: 24px;
+    color: #CC758E;
+    font-weight: 500 !important;
+}
+
+.addwl-btn{
+    background-color: #825AA5 !important;
+    text-transform: capitalize !important;
+  font-family: 'Poppins', sans-serif !important;
+
+  font-weight: 500;
+}
+
+
+@media screen and (max-width:768px) {
+    .addwl-btn{
+        font-size: 12px !important;
+        white-space: nowrap;
+    }
+
+    .wl-t{
+        font-size: 20px;
+    }
+}

@@ -1,0 +1,27 @@
+.emp-crd{
+    box-shadow: 0px 1px 8px #FFBED1;
+
+}
+
+.emp-t{
+    font-size: 24px;
+    color: #CC758E;
+    font-weight: 500 !important;
+}
+
+.emp-img-up{
+    background-color: #FF719B !important;
+    color: white !important;
+}
+
+.emp-sub{
+    background-color: #825AA5 !important;
+    color:  white !important;
+}
+
+
+@media screen and (max-width:768px) {
+    .emp-t{
+        font-size: 20px;
+    }
+}

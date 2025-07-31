@@ -1,0 +1,62 @@
+.cnslt-crd{
+    border-radius: 10px;
+    background-color: #F3F3F3;
+}
+
+.lbls{
+    font-weight: 500;
+}
+
+.consultimg{
+width: -webkit-fill-available;
+}
+
+
+.msrmnt-heading{
+    background-color: transparent !important;
+    border: 1px solid !important;
+    width: max-content !important;
+}
+
+.msrmnt-tbl{
+    border: 1px solid !important;
+}
+
+.msrmnt-data{
+    border: 1px solid !important;
+    /* display: table-cell !important; */
+}
+
+.clt-reset{
+background-color: transparent !important;
+color: #825AA5 !important;
+text-transform: capitalize !important;
+border: 1px solid !important;
+border-color: #825AA5 !important;
+float: right;
+}
+
+
+.clt-submit{
+    background-color: #825AA5 !important;
+    color: white !important;
+    text-transform: capitalize !important;
+    /* border: 1px solid !important; */
+    /* border-color: #825AA5 !important; */
+    /* float: right; */
+}
+
+.igt{
+    background-color: transparent;
+}
+
+.igc{
+    border-right:none;
+}
+
+
+.hist-btn{
+    float: right !important;
+    color: white !important;
+    background-color: #825AA5 !important;
+}

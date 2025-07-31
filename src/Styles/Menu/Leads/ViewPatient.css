@@ -1,0 +1,34 @@
+.dt-lbl{
+    font-size: 1em;
+    font-weight: 500;
+}
+
+.ava-img{
+    width: 150px !important;
+    height: 150px !important;
+}
+
+.dt-lblsub{
+    font-size: 1em;
+}
+
+*{
+    /* border: 1px solid red; */
+    overflow-x: hidden;
+}
+
+
+@media screen and (max-width:768px) {
+    .ava-img{
+        width: 80px !important;
+        height: 80px !important;
+    }
+
+    .dt-lbl{
+        font-size: 0.8em;
+    }
+
+    .dt-lblsub{
+        font-size: 0.8em;
+    }
+}

@@ -1,0 +1,80 @@
+.inv-logo{
+    width: 200px;
+    height: 200px;
+}
+
+.invViewDate{
+    float: right;
+}
+
+.crdH{
+    background-color:rgba(146, 44, 212, 0.15);
+}
+
+.invT{
+    font-size: 20px;
+    font-weight: 500;
+    color: #912AD4;
+}
+
+.invth{
+    background-color: transparent !important;
+    border: none;
+    border: 1px solid black;
+    border-bottom-color: black !important;
+    border-right: 1px solid black !important;
+}
+
+
+.invtd{
+    border-right: 1px solid black !important;
+}
+.invTH{
+    border: 1px solid black;
+}
+
+.invTB{
+    border: 1px solid black !important;
+}
+
+.invNoteTxt{
+    color: #912AD4;
+    font-size: 15px;
+    font-weight: 500;
+}
+
+.invSuppTxt{
+    font-size: 13px;
+}
+
+/* @media print{
+    .noprnt,.css-hyum1k-MuiToolbar-root {
+        display: none !important;
+    }
+} */
+
+
+.prntBtn{
+    background-color: #912AD4 !important;
+    color: white !important;
+}
+
+.crdH2{
+    overflow: hidden !important;
+}
+
+.tnc{
+    font-size: 16px;
+    font-weight: 500;
+    line-height: 35px;
+}
+
+.invCont,.invCont2{
+    font-size: 20px;
+    font-weight: 500;
+    color: #912AD4;
+}
+
+.invCont2{
+    float: right;
+}

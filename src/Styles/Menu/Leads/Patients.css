@@ -1,0 +1,36 @@
+.add-pc-btn{
+    background-color: #825AA5 !important;
+    text-transform: capitalize !important;
+  font-family: 'Poppins', sans-serif !important;
+
+  font-weight: 500;
+}
+
+.up-btn{
+    background-color: #12904c !important;
+    text-transform: capitalize !important;
+    font-family: 'Poppins', sans-serif !important;
+    
+    font-weight: 500;
+    margin-right: auto !important;
+}
+
+.css-80pr5n-MuiPaper-root{
+    overflow-x: scroll !important;
+}
+
+
+@media screen and (max-width:768px) {
+    .add-pc-btn{
+        font-size: 8px !important;
+    }
+    .up-btn{
+        font-size: 8px !important;
+    
+    }
+
+    .exl{
+        scale: 12 !important;
+    }
+    
+}

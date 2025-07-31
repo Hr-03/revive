@@ -1,0 +1,19 @@
+.hpathy-nodata{
+    font-size: 20px;
+    color: #825AA5;
+    font-weight: 500;
+}
+
+.hpathy-add-t{
+    font-size: 24px;
+    color: #825AA5;
+    font-weight: 500;
+}
+
+.hpathy-btn{
+    background-color: #825AA5 !important;
+    color: white !important;
+    text-transform: capitalize !important;
+}
+
+

@@ -1,0 +1,108 @@
+.creds-bg{
+    background: linear-gradient(-207.89deg, #825AA5 0%, #FF92B2 100%);
+    /* transform: matrix(-1, 0, 0, 1, 0, 0);; */
+}
+
+.cred-crd{border-radius: 8px;}
+
+
+.wc-txt{
+    color: #FF5A8B;
+    font-size: 24px;
+    font-weight: 500;
+}
+
+.head-txt{
+    font-size: 20px;
+    font-weight: 500;
+    color: #825AA5;
+    /* white-space: nowrap; */
+    text-overflow: clip;
+}
+
+.cont-main{
+    background-color: #b49cc9;
+}
+
+.login-txt{
+    font-size: 16px;
+}
+.user-ip{
+    border-radius: 10px;
+}
+.pass-ip{
+    border-right: none;
+    border-radius: 10px;
+
+}
+
+.pass-icon{
+    background-color: transparent;
+    border-radius: 10px;
+
+}
+
+.login-btn{
+    background-color: #825AA5;
+    color: white;
+
+    border-radius: 5px;
+}
+.loginlogo{
+    display: none;
+}
+
+
+.btn:focus{
+    box-shadow: none;
+}
+
+
+.form-control:focus{
+    box-shadow: none;
+    border-color: lightgray;
+
+}
+
+.input-group-text{
+        border-left: none;
+}
+
+.swal2-icon.swal2-success,.swal2-icon.swal2-error,.swal2-title{
+    overflow: hidden !important;
+}
+
+.load{
+    color:#e787b0 !important;
+    overflow: hidden !important;
+}
+
+.loginimg{
+    height: 50em;
+    width: -webkit-fill-available !important;
+}
+@media screen and (max-width:768px) {
+    .head-txt{
+        white-space: normal;
+    }
+    .loginimg{
+
+        display: none;
+    }
+
+    .loginlogo{
+        display: block;
+    }
+
+    .imgcol{
+    }
+}
+
+
+@media screen and (max-width:1164px) {
+   
+
+    .loginlogo{
+        display: block;
+    }
+}

@@ -1,0 +1,65 @@
+.navigBar{
+background-color: white !important;
+}
+
+.sbarbtn{
+    color: #9B7BB7 !important;
+    scale: 1.2;
+}
+.closeBtn{
+    color: #9B7BB7 !important;
+    scale: 1.2;
+
+}
+
+.logoimg{
+    margin: auto;
+}
+
+.sideBarcomp{
+    /* background-color: #9B7BB7 !important; */
+    color: white !important;
+    /* border: none !important; */
+}
+
+.css-h4y409-MuiList-root{
+    background-color: #9B7BB7;
+    color: white;
+}
+
+.css-1f2xuhi-MuiDrawer-docked .MuiDrawer-paper{
+    background-color: #9B7BB7;
+    color: white;
+}
+
+.css-12i7wg6-MuiPaper-root-MuiDrawer-paper{
+    border-right: none !important;
+}
+
+.css-1k455el{
+    background-color: white;
+}
+
+.helpbtn{
+    color: #9B7BB7 !important;
+    scale: 1.2;
+    margin-left: auto !important;
+}
+
+
+.profBtn{
+    border: 1px solid #9B7BB7 !important;
+    color: #9B7BB7 !important;
+}
+
+.profIcon{
+    transform: translateY(-2.3px);
+}
+
+@media (min-width: 600px){
+
+.css-hyum1k-MuiToolbar-root {
+    min-height: 85px !important;
+}
+
+}

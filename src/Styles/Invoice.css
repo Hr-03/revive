@@ -1,0 +1,28 @@
+.addT{
+    background: #FF5688 !important;
+    color: white !important;
+    float: right;
+}
+
+.invTh{
+    background-color: transparent !important;
+    border: none !important;
+}
+
+.addColl{
+background-color: #825AA5 !important;
+color: white !important;
+text-transform: capitalize !important;
+}
+
+.genIn{
+    background-color: #825AA5 !important;
+    color: white !important;
+    float: right;
+text-transform: capitalize !important;
+
+}
+
+.req-t{
+    color: red;
+}

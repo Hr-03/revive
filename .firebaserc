@@ -1,0 +1,15 @@
+{
+  "projects": {
+    "default": "revive-938f8"
+  },
+  "targets": {
+    "revive-938f8": {
+      "hosting": {
+        "Revive": [
+          "revive.web.app"
+        ]
+      }
+    }
+  },
+  "etags": {}
+}
